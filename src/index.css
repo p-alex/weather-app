@@ -20,6 +20,18 @@
   --font-dmSans: "DMSans";
   --font-dmSansItalic: "DMSansItalic";
   --font-bricolage: "Bricolage";
+
+  --color-neutral-0: #ffffff;
+  --color-neutral-200: #d4d3d9;
+  --color-neutral-300: #acacb7;
+  --color-neutral-600: #3c3b5e;
+  --color-neutral-700: #302f4a;
+  --color-neutral-800: #262540;
+  --color-neutral-900: #02012c;
+
+  --color-accent: #ff820a;
+  --color-secondary: #4658d9;
+  --color-secondary-dark: #2b1b9c;
 }
 
 @layer base {
