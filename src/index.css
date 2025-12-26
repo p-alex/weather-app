@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: DMSans;
+  src: url("/fonts/DMSans.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: DMSansItalic;
+  src: url("/fonts/DMSansItalic.woff2") format("woff2");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Bricolage;
+  src: url("/fonts/BricolageGrotesque.woff2") format("woff2");
+}
+
+@theme {
+  --font-dmSans: "DMSans";
+  --font-dmSansItalic: "DMSansItalic";
+  --font-bricolage: "Bricolage";
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: DMSans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: Bricolage;
+    font-weight: 700;
+  }
+}
