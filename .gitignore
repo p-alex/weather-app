@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 coverage
 .turbo
+public/desktop.jpg
 
 node_modules
 dist
