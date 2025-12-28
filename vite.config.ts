@@ -9,7 +9,13 @@ export default defineConfig({
     coverage: {
       provider: "v8", // Ensure V8 is used
       include: ["src/**"],
-      exclude: [],
+      exclude: [
+        "src/components/DesignToggler",
+        "src/**/*.css",
+        "src/main.tsx",
+        "src/App.tsx",
+        "src/**/*.context.tsx",
+      ],
     },
 
     globals: true,

@@ -1,5 +1,15 @@
+import Layout from "./components/Layout/Layout";
+import Nav from "./components/Nav/Nav";
+import UnitsContextProvider from "./context/UnitsContextProvider";
+
 function App() {
-  return <>app</>;
+  return (
+    <Layout>
+      <UnitsContextProvider>
+        <Nav />
+      </UnitsContextProvider>
+    </Layout>
+  );
 }
 
 export default App;

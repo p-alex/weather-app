@@ -33,7 +33,6 @@
 
 @theme {
   --font-dmSans: "DMSans";
-  --font-dmSansItalic: "DMSansItalic";
   --font-bricolage: "Bricolage";
 
   --color-neutral-0: #ffffff;
@@ -47,6 +46,12 @@
   --color-accent: #ff820a;
   --color-secondary: #4658d9;
   --color-secondary-dark: #2b1b9c;
+
+  --color-text: #ffffff;
+  --color-text-muted: var(--color-neutral-300);
+
+  --radius-ui-container: 12px;
+  --radius-button: 8px;
 }
 
 @layer base {
@@ -57,7 +62,7 @@
   }
 
   body {
-    font-family: DMSans;
+    @apply text-text bg-neutral-900 leading-[120%] font-dmSans relative;
   }
 
   h1,
