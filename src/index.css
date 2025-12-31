@@ -50,8 +50,15 @@
   --color-text: #ffffff;
   --color-text-muted: var(--color-neutral-300);
 
+  --color-ui: var(--color-neutral-800);
+  --color-ui-hover: var(--color-neutral-700);
+  --color-ui-border: var(--color-neutral-600);
+
   --radius-ui-container: 12px;
-  --radius-button: 8px;
+  --radius-input: 8px;
+
+  --text-field-height: 56px;
+  --primary-button-height: 56px;
 }
 
 @layer base {
@@ -61,12 +68,16 @@
     text-rendering: optimizeLegibility;
   }
 
+  * {
+    opacity: 1;
+  }
+
   body {
     @apply text-text bg-neutral-900 leading-[120%] font-dmSans relative;
-    /* background-image: url("desktop.jpg");
+
+    /* background-image: url("design/dropdown-state.jpg");
     background-repeat: no-repeat;
-    background-position: top center;
-    background-repeat: no-repeat; */
+    background-position: top center; */
   }
 
   h1,

@@ -7,7 +7,7 @@ function DropdownMenuButton({ children, isSelected, ...btnProps }: Props) {
   return (
     <button
       {...btnProps}
-      className={`flex items-center justify-between w-full hover:cursor-pointer text-text py-2.5 px-2 rounded-button hover:bg-neutral-700 font-medium transition-colors ${
+      className={`flex items-center justify-between w-full hover:cursor-pointer text-text py-2.5 px-2 rounded-input hover:bg-ui-hover font-medium transition-colors ${
         isSelected ? "bg-neutral-700" : ""
       }`}
     >

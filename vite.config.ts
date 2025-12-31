@@ -14,7 +14,12 @@ export default defineConfig({
         "src/**/*.css",
         "src/main.tsx",
         "src/App.tsx",
-        "src/**/*.context.tsx",
+        "*.context.tsx",
+        "*.schema.ts",
+        "__fixtures__",
+        "exceptions/**",
+        "domain/entities/**",
+        "infrastructure/dtos/**",
       ],
     },
 

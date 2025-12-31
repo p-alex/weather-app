@@ -1,0 +1,104 @@
+import { useEffect, useRef, useState } from "react";
+import useGetLocations from "../../hooks/useGetLocations";
+import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import TextInput from "../TextInput/TextInput";
+import DropdownMenu from "../DropdownMenu/DropdownMenu";
+import DropdownMenuLoadingMessage from "../DropdownMenu/DropdownMenuLoadingMessage";
+import DropdownMenuButton from "../DropdownMenu/DropdownMenuButton";
+import type { ILocation } from "../../api/domain/entities/ILocation";
+
+interface Props {
+  onLocationSelect: (location: ILocation | null) => void;
+}
+
+function SearchLocationForm({ onLocationSelect }: Props) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getLocations = useGetLocations(searchQuery);
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const query = data.get("query") as string;
+    setSearchQuery(query);
+  };
+
+  const selectLocation = (location: ILocation) => {
+    setSearchQuery("");
+    formRef.current?.reset();
+    onLocationSelect(location);
+  };
+
+  useEffect(() => {
+    if (
+      getLocations.data &&
+      getLocations.data.length === 0 &&
+      !getLocations.isLoading
+    ) {
+      onLocationSelect(null);
+    }
+  }, [getLocations]);
+
+  return (
+    <div className="w-full flex flex-col gap-12">
+      <form
+        className="flex flex-col sm:flex-row justify-center gap-4 items-start"
+        onSubmit={handleSearch}
+        ref={formRef}
+      >
+        <div className="relative flex-1 w-full max-w-131.5">
+          <TextInput
+            placeholder="Search for a place..."
+            name="query"
+            autoComplete="off"
+            icon={
+              <img
+                src="/images/icon-search.svg"
+                width={21}
+                height={21}
+                alt=""
+              />
+            }
+          />
+          {getLocations.isLoading && (
+            <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full">
+              <DropdownMenuLoadingMessage message="Search in progress" />
+            </DropdownMenu>
+          )}
+
+          {getLocations.data &&
+            getLocations.data.length > 0 &&
+            !getLocations.isLoading && (
+              <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full">
+                {getLocations.data.map((location) => {
+                  return (
+                    <DropdownMenuButton
+                      key={location.id}
+                      onClick={() => selectLocation(location)}
+                    >
+                      {`${location.name}, ${location.country}`}
+                    </DropdownMenuButton>
+                  );
+                })}
+              </DropdownMenu>
+            )}
+        </div>
+        <PrimaryButton type="submit" className="w-full sm:w-max">
+          Search
+        </PrimaryButton>
+      </form>
+
+      {getLocations.data &&
+        getLocations.data.length === 0 &&
+        !getLocations.isLoading && (
+          <p className="text-center font-bold text-[28px] text-text">
+            No search result found!
+          </p>
+        )}
+    </div>
+  );
+}
+
+export default SearchLocationForm;

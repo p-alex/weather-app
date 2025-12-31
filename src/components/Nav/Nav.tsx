@@ -31,7 +31,7 @@ function Nav() {
           <button
             ref={toggleRef}
             onClick={toggleVisibility}
-            className="sm:py-3 sm:px-4 py-2 px-2.5 bg-neutral-800 rounded-button text-text font-medium cursor-pointer flex items-center gap-2.5 hover:bg-neutral-700 transition-colors text-sm sm:text-[16px]"
+            className="sm:py-3 sm:px-4 py-2 px-2.5 bg-ui rounded-input text-text font-medium cursor-pointer flex items-center gap-2.5 hover:bg-ui-hover transition-colors text-sm sm:text-[16px]"
           >
             <picture>
               <source
