@@ -44,11 +44,11 @@ function SearchLocationForm({ onLocationSelect }: Props) {
   return (
     <div className="w-full flex flex-col gap-12">
       <form
-        className="flex flex-col sm:flex-row justify-center gap-4 items-start"
+        className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 items-start"
         onSubmit={handleSearch}
         ref={formRef}
       >
-        <div className="relative flex-1 w-full max-w-131.5">
+        <div className="relative flex-1 w-full sm:max-w-131.5">
           <TextInput
             placeholder="Search for a place..."
             name="query"
