@@ -12,6 +12,8 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.14",
+    "@tanstack/react-query-devtools": "^5.91.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zod": "^4.2.1"
@@ -34,6 +36,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "jsdom": "^27.3.0",
+    "msw": "^2.12.7",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
