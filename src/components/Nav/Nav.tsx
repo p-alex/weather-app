@@ -61,7 +61,7 @@ function Nav() {
         )}
         content={() => (
           <DropdownMenu
-            className="absolute sm:top-12.5 top-10.5 right-0"
+            className="absolute sm:top-12.5 top-10.5 right-0 z-(--z-dropdown)"
             data-testid="units-dropdown"
           >
             <DropdownMenuButton

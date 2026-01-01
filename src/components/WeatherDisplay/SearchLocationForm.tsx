@@ -63,7 +63,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
             }
           />
           {getLocations.isLoading && (
-            <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full">
+            <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full z-(--z-dropdown)">
               <DropdownMenuLoadingMessage message="Search in progress" />
             </DropdownMenu>
           )}
@@ -71,7 +71,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
           {getLocations.data &&
             getLocations.data.length > 0 &&
             !getLocations.isLoading && (
-              <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full">
+              <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full z-(--z-dropdown)">
                 {getLocations.data.map((location) => {
                   return (
                     <DropdownMenuButton

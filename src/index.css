@@ -59,6 +59,8 @@
 
   --text-field-height: 56px;
   --primary-button-height: 56px;
+
+  --z-dropdown: 10;
 }
 
 @layer base {
