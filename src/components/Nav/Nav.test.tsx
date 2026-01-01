@@ -1,7 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Nav from "./Nav";
-import UnitsContextProvider from "../../context/UnitsContextProvider";
+import UnitsContextProvider, {
+  precipitationLocalKey,
+  tempLocalKey,
+  windLocalKey,
+  type PrecipitationUnit,
+  type TemperatureUnit,
+  type WindSpeedUnit,
+} from "../../context/UnitsContextProvider";
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <UnitsContextProvider>{children}</UnitsContextProvider>;
@@ -41,6 +48,14 @@ async function getUnitButtons() {
 }
 
 describe("Nav.tsx", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  afterAll(() => {
+    window.localStorage.clear();
+  });
+
   it("should contain a units toggle button", () => {
     render(<Nav />, { wrapper });
 
@@ -259,5 +274,64 @@ describe("Nav.tsx", () => {
     expect(
       screen.queryByRole("button", { name: /switch to imperial/i })
     ).toBeInTheDocument();
+  });
+
+  it("should set the units according to those stored in localstorage", async () => {
+    const tempUnit: TemperatureUnit = "fahrenheit";
+    const windUnit: WindSpeedUnit = "km/h";
+    const precipitationUnit: PrecipitationUnit = "in";
+
+    window.localStorage.setItem(tempLocalKey, JSON.stringify(tempUnit));
+    window.localStorage.setItem(windLocalKey, JSON.stringify(windUnit));
+    window.localStorage.setItem(
+      precipitationLocalKey,
+      JSON.stringify(precipitationUnit)
+    );
+
+    render(<Nav />, { wrapper });
+
+    const toggle = screen.getByRole("button", { name: /units/i });
+
+    await userEvent.click(toggle);
+
+    const tempUnitBtn = screen.getByRole("button", {
+      name: new RegExp(tempUnit, "i"),
+    });
+    const windUnitBtn = screen.getByRole("button", {
+      name: new RegExp(windUnit, "i"),
+    });
+    const precipitationUnitBtn = screen.getByRole("button", {
+      name: new RegExp(precipitationUnit, "i"),
+    });
+
+    expect(tempUnitBtn).toHaveAttribute("aria-selected", "true");
+    expect(windUnitBtn).toHaveAttribute("aria-selected", "true");
+    expect(precipitationUnitBtn).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("should set the units to metric by default", async () => {
+    const tempUnit: TemperatureUnit = "celsius";
+    const windUnit: WindSpeedUnit = "km/h";
+    const precipitationUnit: PrecipitationUnit = "mm";
+
+    render(<Nav />, { wrapper });
+
+    const toggle = screen.getByRole("button", { name: /units/i });
+
+    await userEvent.click(toggle);
+
+    const tempUnitBtn = screen.getByRole("button", {
+      name: new RegExp(tempUnit, "i"),
+    });
+    const windUnitBtn = screen.getByRole("button", {
+      name: new RegExp(windUnit, "i"),
+    });
+    const precipitationUnitBtn = screen.getByRole("button", {
+      name: new RegExp(precipitationUnit, "i"),
+    });
+
+    expect(tempUnitBtn).toHaveAttribute("aria-selected", "true");
+    expect(windUnitBtn).toHaveAttribute("aria-selected", "true");
+    expect(precipitationUnitBtn).toHaveAttribute("aria-selected", "true");
   });
 });
