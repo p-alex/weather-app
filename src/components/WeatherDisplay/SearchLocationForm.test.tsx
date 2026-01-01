@@ -147,4 +147,39 @@ describe("SearchLocationForm.tsx", () => {
 
     expect(onLocationSelectMock).toHaveBeenCalledWith(null);
   });
+
+  it("typing a new search query should cause the previous search results to disappear", async () => {
+    vi.mocked(useGetLocations).mockImplementation(
+      (query: string) =>
+        ({
+          data: query.length >= 2 ? mockLocations : undefined,
+          isLoading: false,
+          isError: false,
+        } as any)
+    );
+
+    render(<SearchLocationForm onLocationSelect={() => {}} />);
+
+    const input = screen.getByRole("textbox");
+
+    await userEvent.type(input, "bu");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await userEvent.click(searchButton);
+
+    expect(
+      screen.getByRole("button", {
+        name: `${mockLocations[0].name}, ${mockLocations[0].country}`,
+      })
+    ).toBeInTheDocument();
+
+    await userEvent.type(input, "to");
+
+    expect(
+      screen.queryByRole("button", {
+        name: `${mockLocations[0].name}, ${mockLocations[0].country}`,
+      })
+    ).not.toBeInTheDocument();
+  });
 });

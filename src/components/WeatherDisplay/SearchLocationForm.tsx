@@ -12,9 +12,10 @@ interface Props {
 }
 
 function SearchLocationForm({ onLocationSelect }: Props) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [query, setQuery] = useState("");
 
-  const getLocations = useGetLocations(searchQuery);
+  const getLocations = useGetLocations(query);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -22,11 +23,11 @@ function SearchLocationForm({ onLocationSelect }: Props) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const query = data.get("query") as string;
-    setSearchQuery(query);
+    setQuery(query);
   };
 
   const selectLocation = (location: ILocation) => {
-    setSearchQuery("");
+    setQuery("");
     formRef.current?.reset();
     onLocationSelect(location);
   };
@@ -41,6 +42,10 @@ function SearchLocationForm({ onLocationSelect }: Props) {
     }
   }, [getLocations]);
 
+  useEffect(() => {
+    if (query) setQuery("");
+  }, [searchValue]);
+
   return (
     <div className="w-full flex flex-col gap-12">
       <form
@@ -53,6 +58,8 @@ function SearchLocationForm({ onLocationSelect }: Props) {
             placeholder="Search for a place..."
             name="query"
             autoComplete="off"
+            value={searchValue}
+            onChange={(event) => setSearchValue(event.target.value)}
             icon={
               <img
                 src="/images/icon-search.svg"
