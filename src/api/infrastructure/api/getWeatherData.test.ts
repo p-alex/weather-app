@@ -5,7 +5,7 @@ import getWeatherData, {
   type GetWeatherParams,
 } from "./getWeatherData";
 import ApiException from "../../exceptions/ApiException";
-import { getWeatherDataExternalFixture } from "../../../__fixtures__/weather/getWeatherDataExternalFixture";
+import { getWeatherDataExternalResponseFixture } from "../../../__fixtures__/weather/getWeatherDataExternalResponseFixture";
 
 const server = setupServer(
   http.get(GET_WEATHER_DATA_BASE_URL, ({ request }) => {
@@ -15,7 +15,7 @@ const server = setupServer(
       return new HttpResponse(null, { status: 500 });
     }
 
-    return HttpResponse.json(getWeatherDataExternalFixture);
+    return HttpResponse.json(getWeatherDataExternalResponseFixture);
   })
 );
 
@@ -35,7 +35,7 @@ describe("getWeatherData.ts", () => {
   it("should return weather data", async () => {
     const result = await getWeatherData(1, 1);
 
-    expect(result).toEqual(getWeatherDataExternalFixture);
+    expect(result).toEqual(getWeatherDataExternalResponseFixture);
   });
 
   it("throws ApiException when request fails", async () => {

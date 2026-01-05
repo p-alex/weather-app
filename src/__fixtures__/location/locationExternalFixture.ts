@@ -1,4 +1,4 @@
-import type { LocationExternal } from "../api/infrastructure/dtos/LocationExternal";
+import type { LocationExternal } from "../../api/infrastructure/dtos/LocationExternal";
 
 const locationExternalFixture: LocationExternal = {
   id: 1850147,

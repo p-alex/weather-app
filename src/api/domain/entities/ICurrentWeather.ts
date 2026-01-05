@@ -4,4 +4,5 @@ export interface ICurrentWeather {
   precipitation: number;
   windSpeed: number;
   weatherCode: number;
+  humidity: number;
 }

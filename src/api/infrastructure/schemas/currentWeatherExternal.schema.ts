@@ -8,6 +8,7 @@ const currentWeatherExternal = z.object({
   precipitation: z.number(),
   weather_code: z.number(),
   wind_speed_10m: z.number(),
+  relative_humidity_2m: z.number(),
 });
 
 export default currentWeatherExternal;

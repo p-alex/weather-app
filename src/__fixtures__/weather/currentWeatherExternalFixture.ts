@@ -8,4 +8,5 @@ export const currentWeatherExternalFixture: CurrentWeatherExternal = {
   time: "time",
   weather_code: 5,
   wind_speed_10m: 6,
+  relative_humidity_2m: 40,
 };

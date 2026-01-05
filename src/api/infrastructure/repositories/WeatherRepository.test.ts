@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { GET_WEATHER_DATA_BASE_URL } from "../api/getWeatherData";
-import { getWeatherDataExternalFixture } from "../../../__fixtures__/weather/getWeatherDataExternalFixture";
+import { getWeatherDataExternalResponseFixture } from "../../../__fixtures__/weather/getWeatherDataExternalResponseFixture";
 import type { GetWeatherDataResponse } from "../dtos/GetWeatherDataResponse";
 import { WeatherRepository } from "./WeatherRepository";
 import { currentWeatherFixture } from "../../../__fixtures__/weather/currentWeatherFixture";
@@ -11,7 +11,7 @@ import ApiException from "../../exceptions/ApiException";
 
 const server = setupServer(
   http.get(GET_WEATHER_DATA_BASE_URL, () => {
-    return HttpResponse.json(getWeatherDataExternalFixture);
+    return HttpResponse.json(getWeatherDataExternalResponseFixture);
   })
 );
 
@@ -37,7 +37,7 @@ describe("WeatherRepository.ts", () => {
     server.use(
       http.get(GET_WEATHER_DATA_BASE_URL, () => {
         const invalidResponse: GetWeatherDataResponse = {
-          ...getWeatherDataExternalFixture,
+          ...getWeatherDataExternalResponseFixture,
           current: null as any,
           daily: null as any,
           hourly: null as any,

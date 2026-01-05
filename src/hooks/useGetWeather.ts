@@ -14,8 +14,7 @@ function useGetWeather(location: ILocation | null) {
   return useQuery({
     queryKey: [makeGetWeatherCacheKey(location)],
     queryFn: () => {
-      if (!location) return null;
-      return getWeatherUsecase.execute(location.latitude, location.longitude);
+      return getWeatherUsecase.execute(location!.latitude, location!.longitude);
     },
     retry: false,
     refetchOnWindowFocus: true,

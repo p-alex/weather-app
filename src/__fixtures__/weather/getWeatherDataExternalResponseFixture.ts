@@ -6,7 +6,7 @@ import { dailyWeatherUnitsExternalFixture } from "./dailyWeatherUnitsExternalFix
 import { hourlyWeatherExternalFixture } from "./hourlyWeatherExternalFixture";
 import { hourlyWeatherUnitsExternalFixture } from "./hourlyWeatherUnitsExternalFixture";
 
-export const getWeatherDataExternalFixture: GetWeatherDataResponse = {
+export const getWeatherDataExternalResponseFixture: GetWeatherDataResponse = {
   current: currentWeatherExternalFixture,
   current_units: currentWeatherUnitsExternalFixture,
   daily: dailyWeatherExternalFixture,

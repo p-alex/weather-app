@@ -10,6 +10,7 @@ export class CurrentWeatherMapper {
     windSpeed: currentWeatherExternal.wind_speed_10m,
     precipitation: currentWeatherExternal.precipitation,
     weatherCode: currentWeatherExternal.weather_code,
+    humidity: currentWeatherExternal.relative_humidity_2m,
   });
 }
 
