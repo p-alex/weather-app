@@ -6,8 +6,10 @@ interface Props {
 function CurrentWeatherCell({ title, value }: Props) {
   return (
     <div className="w-full bg-ui border border-ui-border rounded-ui-container p-5 flex flex-col gap-6">
-      <p className="font-lg font-medium text-text-muted">{title}</p>
-      <p className="text-text text-[2rem] font-light">{value}</p>
+      <p className="text-lg font-medium text-text-muted leading-[120%]">
+        {title}
+      </p>
+      <p className="text-text text-[2rem] font-light leading-[100%]">{value}</p>
     </div>
   );
 }
