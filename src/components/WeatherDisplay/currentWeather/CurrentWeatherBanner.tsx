@@ -28,7 +28,7 @@ function CurrentWeatherBanner({
 
   return (
     <div
-      className={`${bannerBg} w-full h-71.5 rounded-2xl overflow-hidden py-10.25 min-[747px]:py-20 px-6 gap-4 flex items-center min-[747px]:justify-between max-[747px]:flex-col max-[747px]:text-center`}
+      className={`${bannerBg} w-full h-71.5 rounded-2xl overflow-hidden py-10.25 min-[747px]:py-20 px-6 gap-4 flex items-center min-[747px]:justify-between max-[747px]:flex-col max-[747px]:text-center max-[315px]:h-auto`}
       data-testid="weather-banner"
     >
       {canShowData && (
@@ -41,7 +41,7 @@ function CurrentWeatherBanner({
               {processDate(new Date().toISOString())}
             </p>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5 max-[315px]:flex-col">
             {currentWeather !== null && (
               <img
                 src={weatherCodeToImageUrl(currentWeather.weatherCode)}
