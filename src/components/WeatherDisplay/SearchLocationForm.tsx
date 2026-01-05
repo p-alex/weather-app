@@ -15,7 +15,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
 
-  const getLocations = useGetLocations(query);
+  const locations = useGetLocations(query);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -33,18 +33,21 @@ function SearchLocationForm({ onLocationSelect }: Props) {
   };
 
   useEffect(() => {
-    if (
-      getLocations.data &&
-      getLocations.data.length === 0 &&
-      !getLocations.isLoading
-    ) {
+    if (locations.data && locations.data.length === 0 && !locations.isLoading) {
       onLocationSelect(null);
     }
-  }, [getLocations]);
+  }, [locations]);
 
-  useEffect(() => {
-    if (query) setQuery("");
-  }, [searchValue]);
+  const isTyping = searchValue !== query;
+
+  const shouldShowResults =
+    locations.data &&
+    locations.data.length > 0 &&
+    !locations.isLoading &&
+    !isTyping;
+
+  const shouldShowNoSearchResultsMessage =
+    locations.data && locations.data.length === 0 && !locations.isLoading;
 
   return (
     <div className="w-full flex flex-col gap-12">
@@ -69,41 +72,47 @@ function SearchLocationForm({ onLocationSelect }: Props) {
               />
             }
           />
-          {getLocations.isLoading && (
+
+          {locations.isLoading && (
             <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full z-(--z-dropdown)">
               <DropdownMenuLoadingMessage message="Search in progress" />
             </DropdownMenu>
           )}
 
-          {getLocations.data &&
-            getLocations.data.length > 0 &&
-            !getLocations.isLoading && (
-              <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full z-(--z-dropdown)">
-                {getLocations.data.map((location) => {
-                  return (
-                    <DropdownMenuButton
-                      key={location.id}
-                      onClick={() => selectLocation(location)}
-                    >
-                      {`${location.name}, ${location.country}`}
-                    </DropdownMenuButton>
-                  );
-                })}
-              </DropdownMenu>
-            )}
+          {shouldShowResults && (
+            <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full z-(--z-dropdown)">
+              {locations.data.map((location) => {
+                return (
+                  <DropdownMenuButton
+                    key={location.id}
+                    onClick={() => selectLocation(location)}
+                  >
+                    {`${location.name}, ${location.country}`}
+                  </DropdownMenuButton>
+                );
+              })}
+            </DropdownMenu>
+          )}
         </div>
         <PrimaryButton type="submit" className="w-full sm:w-max">
           Search
         </PrimaryButton>
       </form>
 
-      {getLocations.data &&
-        getLocations.data.length === 0 &&
-        !getLocations.isLoading && (
-          <p className="text-center font-bold text-[28px] text-text">
-            No search result found!
+      {locations.error && (
+        <div className="flex flex-col gap-6 items-center w-full max-w-138.5 mx-auto">
+          <img src="/images/icon-error.svg" width={50} height={50} alt="" />
+          <p className="text-center font-medium text-xl text-text-muted">
+            {locations.error.message}
           </p>
-        )}
+        </div>
+      )}
+
+      {shouldShowNoSearchResultsMessage && (
+        <p className="text-center font-bold text-[28px] text-text">
+          No search result found!
+        </p>
+      )}
     </div>
   );
 }

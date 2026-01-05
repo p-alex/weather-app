@@ -2,17 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import type { ILocation } from "../api/domain/entities/ILocation";
 import getWeatherUsecase from "../api/application/usecases/GetWeatherUsecase";
 
-function makeGetWeatherCacheKey(location: ILocation | null) {
-  if (!location) {
+export function makeGetWeatherCacheKey(latitude?: number, longitude?: number) {
+  if (!latitude || !longitude) {
     return "weather-data";
   } else {
-    return "weather-data-" + location.latitude + "-" + location.longitude;
+    return "weather-data-" + latitude + "-" + longitude;
   }
 }
 
 function useGetWeather(location: ILocation | null) {
   return useQuery({
-    queryKey: [makeGetWeatherCacheKey(location)],
+    queryKey: [makeGetWeatherCacheKey(location?.latitude, location?.longitude)],
     queryFn: () => {
       return getWeatherUsecase.execute(location!.latitude, location!.longitude);
     },

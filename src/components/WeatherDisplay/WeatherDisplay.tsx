@@ -2,11 +2,15 @@ import { useState } from "react";
 import Header from "../Header/Header";
 import SearchLocationForm from "./SearchLocationForm";
 import type { ILocation } from "../../api/domain/entities/ILocation";
-import useGetWeather from "../../hooks/useGetWeather";
+import useGetWeather, {
+  makeGetWeatherCacheKey,
+} from "../../hooks/useGetWeather";
 import CurrentWeatherSection from "./currentWeather/CurrentWeatherSection";
 import useUnitsContext from "../../context/useUnitsContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 function WeatherDisplay() {
+  const queryClient = useQueryClient();
   const { units } = useUnitsContext();
 
   const [currentLocation, setCurrentLocation] = useState<ILocation | null>(
@@ -15,30 +19,62 @@ function WeatherDisplay() {
 
   const weather = useGetWeather(currentLocation);
 
+  const handleRetry = () => {
+    queryClient.resetQueries({
+      queryKey: [
+        makeGetWeatherCacheKey(
+          currentLocation?.latitude,
+          currentLocation?.longitude
+        ),
+      ],
+    });
+  };
+
   return (
     <div>
-      <div className="mb-8 min-[747px]:mb-12">
-        <Header title="How’s the sky looking today?" />
-        <SearchLocationForm onLocationSelect={setCurrentLocation} />
-      </div>
-
-      {currentLocation && (
-        <div
-          className="w-full grid grid-cols-3 gap-8"
-          data-testid="weather-data-container"
-        >
-          <div className="col-span-3 min-[1121px]:col-span-2">
-            <CurrentWeatherSection
-              currentWeather={
-                weather.data?.currentWeather
-                  ? weather.data.currentWeather
-                  : null
-              }
-              currentLocation={currentLocation}
-              units={units}
-              isLoading={weather.isLoading}
-            />
+      {!weather.error && (
+        <>
+          <div className="mb-8 min-[747px]:mb-12">
+            <Header title="How’s the sky looking today?" />
+            <SearchLocationForm onLocationSelect={setCurrentLocation} />
           </div>
+
+          {currentLocation && (
+            <div
+              className="w-full grid grid-cols-3 gap-8"
+              data-testid="weather-data-container"
+            >
+              <div className="col-span-3 min-[1121px]:col-span-2">
+                <CurrentWeatherSection
+                  currentWeather={
+                    weather.data?.currentWeather
+                      ? weather.data.currentWeather
+                      : null
+                  }
+                  currentLocation={currentLocation}
+                  units={units}
+                  isLoading={weather.isLoading}
+                />
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      {weather.error && (
+        <div className="mt-26 text-center flex flex-col gap-6 items-center">
+          <img src="/images/icon-error.svg" width={50} height={50} alt="" />
+          <h1>Something went wrong</h1>
+          <p className="text-xl text-text-muted font-medium w-full max-w-138.5 mx-auto">
+            {weather.error.message}
+          </p>
+          <button
+            className="py-3 px-4 rounded-input flex items-center gap-2.5 bg-ui cursor-pointer hover:bg-ui-hover transition-colors disabled:opacity-75"
+            onClick={handleRetry}
+            disabled={weather.isLoading}
+          >
+            <img src="/images/icon-retry.svg" width={16} height={16} alt="" />
+            Retry
+          </button>
         </div>
       )}
     </div>

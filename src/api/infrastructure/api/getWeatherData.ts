@@ -35,7 +35,8 @@ async function getWeatherData(latitude: number, longitude: number) {
 
   const response = await fetch(url);
 
-  if (!response.ok) throw new ApiException("Failed to fetch weather data.");
+  if (!response.ok)
+    throw new ApiException(`Failed to fetch weather data. (API error)`);
 
   return (await response.json()) as GetWeatherDataResponse;
 }

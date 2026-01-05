@@ -9,7 +9,10 @@ async function getLocationData(
 ): Promise<GetLocationsResponse> {
   const url = `${GET_LOCATION_DATA_BASE_URL}?name=${searchQuery}`;
   const response = await fetch(url);
-  if (!response.ok) throw new ApiException("Failed to retrieve locations.");
+  if (!response.ok)
+    throw new ApiException(
+      "Failed to retrieve locations from the server (API error). Please try again later."
+    );
   const json: GetLocationsResponse = await response.json();
   return json;
 }

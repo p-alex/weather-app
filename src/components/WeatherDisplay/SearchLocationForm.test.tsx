@@ -1,27 +1,52 @@
 import { vi } from "vitest";
-import type { ILocation } from "../../api/domain/entities/ILocation";
 import { render, screen } from "@testing-library/react";
 import SearchLocationForm from "./SearchLocationForm";
-import useGetLocations from "../../hooks/useGetLocations";
 import userEvent from "@testing-library/user-event";
+import { setupServer } from "msw/node";
+import { http, HttpResponse } from "msw";
+import { GET_LOCATION_DATA_BASE_URL } from "../../api/infrastructure/api/getLocationData";
+import { getLocationDataExternalResponseFixture } from "../../__fixtures__/location/getLocationDataExternalResponseFixture";
+import { getLocationUsecaseResponseFixture } from "../../__fixtures__/usecases/location/getLocationUsecaseResponseFixture";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-vi.mock("../../hooks/useGetLocations", () => ({
-  default: vi.fn(),
-}));
+const server = setupServer(
+  http.get(GET_LOCATION_DATA_BASE_URL, () => {
+    return HttpResponse.json(getLocationDataExternalResponseFixture);
+  })
+);
 
-const mockLocations: ILocation[] = [
-  { id: 1, name: "Bucharest", country: "Romania", latitude: 1, longitude: 2 },
-  { id: 2, name: "Cluj-Napoca", country: "Romania", latitude: 1, longitude: 2 },
-];
+function createWrapper() {
+  const queryClient = new QueryClient();
+
+  return ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+}
 
 describe("SearchLocationForm.tsx", () => {
-  it("should display a loading message while the search is loading", async () => {
-    vi.mocked(useGetLocations).mockReturnValue({
-      data: [],
-      isLoading: true,
-    } as any);
+  beforeAll(() => {
+    server.listen();
+  });
 
-    render(<SearchLocationForm onLocationSelect={() => {}} />);
+  afterEach(() => {
+    server.resetHandlers();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("should display a loading message while the search is loading", async () => {
+    server.use(
+      http.get(GET_LOCATION_DATA_BASE_URL, async () => {
+        await new Promise((resolve) => setTimeout(resolve, 20));
+        return HttpResponse.json(getLocationDataExternalResponseFixture);
+      })
+    );
+
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
 
     const searchInput = screen.getByRole("textbox");
 
@@ -31,22 +56,15 @@ describe("SearchLocationForm.tsx", () => {
 
     await userEvent.click(searchButton);
 
-    const loadingMessage = screen.getByText(/search in progress/i);
+    const loadingMessage = await screen.findByText(/search in progress/i);
 
     expect(loadingMessage).toBeInTheDocument();
   });
 
   it("should display search results after searching", async () => {
-    vi.mocked(useGetLocations).mockImplementation(
-      (query: string) =>
-        ({
-          data: query.length >= 2 ? mockLocations : undefined,
-          isLoading: false,
-          isError: false,
-        } as any)
-    );
-
-    render(<SearchLocationForm onLocationSelect={() => {}} />);
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
 
     const input = screen.getByRole("textbox");
 
@@ -56,7 +74,7 @@ describe("SearchLocationForm.tsx", () => {
 
     await userEvent.click(searchButton);
 
-    mockLocations.forEach((location) => {
+    getLocationUsecaseResponseFixture.forEach((location) => {
       expect(
         screen.getByRole("button", {
           name: `${location.name}, ${location.country}`,
@@ -66,18 +84,11 @@ describe("SearchLocationForm.tsx", () => {
   });
 
   it("should select a search result", async () => {
-    vi.mocked(useGetLocations).mockImplementation(
-      (query: string) =>
-        ({
-          data: query.length >= 2 ? mockLocations : undefined,
-          isLoading: false,
-          isError: false,
-        } as any)
-    );
-
     const onLocationSelectMock = vi.fn();
 
-    render(<SearchLocationForm onLocationSelect={onLocationSelectMock} />);
+    render(<SearchLocationForm onLocationSelect={onLocationSelectMock} />, {
+      wrapper: createWrapper(),
+    });
 
     const input = screen.getByRole("textbox");
 
@@ -88,27 +99,26 @@ describe("SearchLocationForm.tsx", () => {
     await userEvent.click(searchButton);
 
     const searchResultButton = screen.getByRole("button", {
-      name: `${mockLocations[0].name}, ${mockLocations[0].country}`,
+      name: `${getLocationUsecaseResponseFixture[0].name}, ${getLocationUsecaseResponseFixture[0].country}`,
     });
 
     await userEvent.click(searchResultButton);
 
-    expect(onLocationSelectMock).toHaveBeenCalledWith(mockLocations[0]);
+    expect(onLocationSelectMock).toHaveBeenCalledWith(
+      getLocationUsecaseResponseFixture[0]
+    );
   });
 
   it("should display a no results message if there are no results to display", async () => {
-    vi.mocked(useGetLocations).mockImplementation(
-      (query: string) =>
-        ({
-          data: query.length >= 2 ? [] : undefined,
-          isLoading: false,
-          isError: false,
-        } as any)
+    server.use(
+      http.get(GET_LOCATION_DATA_BASE_URL, () => HttpResponse.json([]))
     );
 
     const onLocationSelectMock = vi.fn();
 
-    render(<SearchLocationForm onLocationSelect={onLocationSelectMock} />);
+    render(<SearchLocationForm onLocationSelect={onLocationSelectMock} />, {
+      wrapper: createWrapper(),
+    });
 
     const input = screen.getByRole("textbox");
 
@@ -124,18 +134,15 @@ describe("SearchLocationForm.tsx", () => {
   });
 
   it("should call onLocationSelect with null if there are no results to show", async () => {
-    vi.mocked(useGetLocations).mockImplementation(
-      (query: string) =>
-        ({
-          data: query.length >= 2 ? [] : undefined,
-          isLoading: false,
-          isError: false,
-        } as any)
+    server.use(
+      http.get(GET_LOCATION_DATA_BASE_URL, () => HttpResponse.json([]))
     );
 
     const onLocationSelectMock = vi.fn();
 
-    render(<SearchLocationForm onLocationSelect={onLocationSelectMock} />);
+    render(<SearchLocationForm onLocationSelect={onLocationSelectMock} />, {
+      wrapper: createWrapper(),
+    });
 
     const input = screen.getByRole("textbox");
 
@@ -149,16 +156,9 @@ describe("SearchLocationForm.tsx", () => {
   });
 
   it("typing a new search query should cause the previous search results to disappear", async () => {
-    vi.mocked(useGetLocations).mockImplementation(
-      (query: string) =>
-        ({
-          data: query.length >= 2 ? mockLocations : undefined,
-          isLoading: false,
-          isError: false,
-        } as any)
-    );
-
-    render(<SearchLocationForm onLocationSelect={() => {}} />);
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
 
     const input = screen.getByRole("textbox");
 
@@ -170,7 +170,7 @@ describe("SearchLocationForm.tsx", () => {
 
     expect(
       screen.getByRole("button", {
-        name: `${mockLocations[0].name}, ${mockLocations[0].country}`,
+        name: `${getLocationUsecaseResponseFixture[0].name}, ${getLocationUsecaseResponseFixture[0].country}`,
       })
     ).toBeInTheDocument();
 
@@ -178,8 +178,33 @@ describe("SearchLocationForm.tsx", () => {
 
     expect(
       screen.queryByRole("button", {
-        name: `${mockLocations[0].name}, ${mockLocations[0].country}`,
+        name: `${getLocationUsecaseResponseFixture[0].name}, ${getLocationUsecaseResponseFixture[0].country}`,
       })
     ).not.toBeInTheDocument();
+  });
+
+  it("should display error message if location search request fails", async () => {
+    server.use(
+      http.get(
+        GET_LOCATION_DATA_BASE_URL,
+        () => new HttpResponse(null, { status: 500 })
+      )
+    );
+
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
+
+    const input = screen.getByRole("textbox");
+
+    await userEvent.type(input, "bu");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await userEvent.click(searchButton);
+
+    const message = screen.getByText(/failed/i);
+
+    expect(message).toBeInTheDocument();
   });
 });
