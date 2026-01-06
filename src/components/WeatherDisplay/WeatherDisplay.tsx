@@ -8,10 +8,11 @@ import useGetWeather, {
 import CurrentWeatherSection from "./currentWeather/CurrentWeatherSection";
 import useUnitsContext from "../../context/useUnitsContext";
 import { useQueryClient } from "@tanstack/react-query";
+import DailyWeatherSection from "./dailyWeather/DailyWeatherSection";
 
 function WeatherDisplay() {
   const queryClient = useQueryClient();
-  const { units } = useUnitsContext();
+  const units = useUnitsContext().units;
 
   const [currentLocation, setCurrentLocation] = useState<ILocation | null>(
     null
@@ -40,21 +41,33 @@ function WeatherDisplay() {
           </div>
 
           {currentLocation && (
-            <div
-              className="w-full grid grid-cols-3 gap-8"
-              data-testid="weather-data-container"
-            >
-              <div className="col-span-3 min-[1121px]:col-span-2">
-                <CurrentWeatherSection
-                  currentWeather={
-                    weather.data?.currentWeather
-                      ? weather.data.currentWeather
-                      : null
-                  }
-                  currentLocation={currentLocation}
-                  units={units}
-                  isLoading={weather.isLoading}
-                />
+            <div className="flex flex-col gap-8">
+              <div
+                className="w-full grid grid-cols-3 grid-rows-2 gap-8"
+                data-testid="weather-data-container"
+              >
+                <div className="col-span-3 min-[1121px]:col-span-2">
+                  <CurrentWeatherSection
+                    currentWeather={
+                      weather.data?.currentWeather
+                        ? weather.data.currentWeather
+                        : null
+                    }
+                    currentLocation={currentLocation}
+                    units={units}
+                    isLoading={weather.isLoading}
+                  />
+                </div>
+                <div className="col-span-3 min-[1121px]:col-span-2 row">
+                  <DailyWeatherSection
+                    dailyWeather={
+                      weather.data?.dailyWeather
+                        ? weather.data.dailyWeather
+                        : null
+                    }
+                    units={units}
+                  />
+                </div>
               </div>
             </div>
           )}

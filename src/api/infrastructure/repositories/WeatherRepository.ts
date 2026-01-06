@@ -14,7 +14,7 @@ export class WeatherRepository {
     const response = await getWeatherData(latitude, longitude);
 
     let currentWeather: ICurrentWeather | null = null;
-    let dailyWeather: IDailyWeather | null = null;
+    let dailyWeather: IDailyWeather[] | null = null;
     let hourlyWeather: IHourlyWeather | null = null;
 
     const { success: isValidCurrentWeather } = currentWeatherExternal.safeParse(
@@ -34,7 +34,9 @@ export class WeatherRepository {
     }
 
     if (isValidDailyWeather) {
-      dailyWeather = dailyWeatherMapper.externalToEntity(response.daily);
+      try {
+        dailyWeather = dailyWeatherMapper.externalToEntity(response.daily);
+      } catch (error) {}
     }
 
     if (isValidHourlyWeather) {

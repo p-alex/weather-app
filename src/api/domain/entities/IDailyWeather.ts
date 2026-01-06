@@ -1,6 +1,6 @@
 export interface IDailyWeather {
-  dates: string[];
-  weatherCodes: number[];
-  maxTemperatures: number[];
-  minTemperatures: number[];
+  date: string;
+  weatherCode: number;
+  maxTemperature: number;
+  minTemperature: number;
 }

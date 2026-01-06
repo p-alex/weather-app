@@ -14,7 +14,7 @@ describe("GetWeatherUsecase.ts", () => {
   const repositoryResult: Awaited<ReturnType<WeatherRepository["getAllData"]>> =
     {
       currentWeather: currentWeatherFixture,
-      dailyWeather: dailyWeatherFixture,
+      dailyWeather: [dailyWeatherFixture],
       hourlyWeather: hourlyWeatherFixture,
     };
 
