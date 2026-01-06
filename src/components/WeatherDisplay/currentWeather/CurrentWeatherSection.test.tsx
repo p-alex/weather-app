@@ -29,7 +29,7 @@ describe("CurrentWeatherSection.tsx", () => {
     );
 
     const precipitation = screen.getByText(
-      `${currentWeatherFixture.precipitation.toFixed(2)} mm`
+      `${currentWeatherFixture.precipitation.toFixed(1)} mm`
     );
 
     expect(temperature).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("CurrentWeatherSection.tsx", () => {
     );
 
     const precipitation = screen.getByText(
-      `${(currentWeatherFixture.precipitation / 25.4).toFixed(2)} in`
+      `${(currentWeatherFixture.precipitation / 25.4).toFixed(1)} in`
     );
 
     expect(temperature).toBeInTheDocument();

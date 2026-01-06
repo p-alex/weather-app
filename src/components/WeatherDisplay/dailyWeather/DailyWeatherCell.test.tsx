@@ -26,7 +26,7 @@ describe("DailyWeatherCell.tsx", () => {
       />
     );
 
-    expect(screen.getByText("Wed")).toBeInTheDocument();
+    expect(screen.getByText("Tue")).toBeInTheDocument();
     expect(screen.getByText("10°")).toBeInTheDocument();
     expect(screen.getByText("5°")).toBeInTheDocument();
 
