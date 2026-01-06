@@ -73,15 +73,15 @@ function CurrentWeatherBanner({
 }
 
 function processDate(date: string) {
-  const days = {
-    1: "Monday",
-    2: "Tuesday",
-    3: "Wednesday",
-    4: "Thursday",
-    5: "Friday",
-    6: "Saturday",
-    7: "Sunday",
-  };
+  const weekDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const months = {
     1: "Jan",
@@ -100,11 +100,12 @@ function processDate(date: string) {
 
   const dateObj = new Date(date);
 
-  const day = dateObj.getDate() as keyof typeof days;
+  const dayOfTheWeek = dateObj.getDay();
+  const dayOfTheMonth = dateObj.getDate();
   const month = (dateObj.getMonth() + 1) as keyof typeof months;
   const year = dateObj.getFullYear();
 
-  return `${days[day]}, ${months[month]} ${day}, ${year}`;
+  return `${weekDays[dayOfTheWeek]}, ${months[month]} ${dayOfTheMonth}, ${year}`;
 }
 
 export default CurrentWeatherBanner;
