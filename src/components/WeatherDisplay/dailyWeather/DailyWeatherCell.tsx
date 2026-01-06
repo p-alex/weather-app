@@ -38,19 +38,11 @@ function DailyWeatherCell({ dailyWeather, units }: Props) {
 }
 
 function processDate(date: string) {
-  const days = {
-    0: "Mon",
-    1: "Tue",
-    2: "Wed",
-    3: "Thu",
-    4: "Fri",
-    5: "Sat",
-    6: "Sun",
-  };
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const currentDate = new Date(date);
 
-  return days[currentDate.getDay() as keyof typeof days];
+  return weekDays[currentDate.getDay()];
 }
 
 export default DailyWeatherCell;
