@@ -33,7 +33,7 @@ function WeatherDisplay() {
   };
 
   return (
-    <div>
+    <div className="mb-4">
       {!weather.error && (
         <>
           <div className="mb-8 min-[747px]:mb-12">
