@@ -2,6 +2,7 @@ import type { ICurrentWeather } from "../../../api/domain/entities/ICurrentWeath
 import type { ILocation } from "../../../api/domain/entities/ILocation";
 import type { Units } from "../../../context/UnitsContextProvider";
 import useDisplayTemperature from "../../../hooks/useDisplayTemperature";
+import datePartsExtractor from "../../../utils/DatePartsExtractor";
 import weatherCodeToImageUrl from "../../../utils/weather/weatherCodeToImageUrl";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
   units: Units;
   isLoading: boolean;
 }
+
+const today = new Date();
 
 function CurrentWeatherBanner({
   currentLocation,
@@ -38,7 +41,13 @@ function CurrentWeatherBanner({
               {currentLocation.name}, {currentLocation.country}
             </h2>
             <p className="font-medium text-text text-lg opacity-80 leading-[100%]">
-              {processDate(new Date().toISOString())}
+              {`${datePartsExtractor.getDayFullText(
+                today
+              )}, ${datePartsExtractor.getMonthPartialText(
+                today
+              )} ${datePartsExtractor.getDay(
+                today
+              )}, ${datePartsExtractor.getYear(today)}`}
             </p>
           </div>
           <div className="flex items-center gap-5 max-[315px]:flex-col">
@@ -70,42 +79,6 @@ function CurrentWeatherBanner({
       )}
     </div>
   );
-}
-
-function processDate(date: string) {
-  const weekDays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  const months = {
-    1: "Jan",
-    2: "Feb",
-    3: "Mar",
-    4: "Apr",
-    5: "May",
-    6: "Jun",
-    7: "Jul",
-    8: "Aug",
-    9: "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dec",
-  };
-
-  const dateObj = new Date(date);
-
-  const dayOfTheWeek = dateObj.getDay();
-  const dayOfTheMonth = dateObj.getDate();
-  const month = (dateObj.getMonth() + 1) as keyof typeof months;
-  const year = dateObj.getFullYear();
-
-  return `${weekDays[dayOfTheWeek]}, ${months[month]} ${dayOfTheMonth}, ${year}`;
 }
 
 export default CurrentWeatherBanner;

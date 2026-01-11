@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import type { GetWeatherUsecaseResult } from "../../../api/application/usecases/GetWeatherUsecase";
-import {
-  daysOfTheWeek,
-  type DayOfTheWeekFullStrType,
-} from "../../../utils/extractDayOfTheWeekFromDate";
 import DropdownMenu from "../../DropdownMenu/DropdownMenu";
 import DropdownMenuButton from "../../DropdownMenu/DropdownMenuButton";
 import VisibilityProvider from "../../VisibilityProvider/VisibilityProvider";
 import HourlyWeatherCell from "./HourlyWeatherCell";
 import type { IHourlyWeather } from "../../../api/domain/entities/IHourlyWeather";
-import datePartsExtractor from "../../../utils/DatePartsExtractor";
+import datePartsExtractor, {
+  daysFullStr,
+  type DaysFullStr,
+} from "../../../utils/DatePartsExtractor";
 
 interface Props {
   hourlyWeather: GetWeatherUsecaseResult["hourlyWeather"];
@@ -34,7 +33,7 @@ function HourlyWeatherSection({ hourlyWeather, todayDate, isLoading }: Props) {
   }, [hourlyWeather]);
 
   const [selectedDay, setSelectedDay] =
-    useState<DayOfTheWeekFullStrType>(currentDay);
+    useState<DaysFullStr[number]>(currentDay);
 
   const handleScrollCurrentHourCellIntoView = useCallback(() => {
     const currentHourCell = document.getElementById(
@@ -183,14 +182,14 @@ function groupHourlyWeatherByDate(
   }, {} as { [key: string]: IHourlyWeather[] });
 }
 
-function handleReorderDaysOfTheWeek(currentDay: DayOfTheWeekFullStrType) {
-  const prevDays: DayOfTheWeekFullStrType[] = [];
-  const result: DayOfTheWeekFullStrType[] = [];
+function handleReorderDaysOfTheWeek(currentDay: DaysFullStr[number]) {
+  const prevDays: DaysFullStr[number][] = [];
+  const result: DaysFullStr[number][] = [];
 
   let currentDayReached = false;
 
-  for (let i = 0; i < daysOfTheWeek.length; i++) {
-    const day = daysOfTheWeek[i];
+  for (let i = 0; i < daysFullStr.length; i++) {
+    const day = daysFullStr[i];
 
     if (day === currentDay) currentDayReached = true;
 

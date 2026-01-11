@@ -5,7 +5,7 @@ export const currentWeatherExternalFixture: CurrentWeatherExternal = {
   interval: 2,
   precipitation: 3,
   temperature_2m: 4,
-  time: "time",
+  time: "2023-03-03",
   weather_code: 5,
   wind_speed_10m: 6,
   relative_humidity_2m: 40,

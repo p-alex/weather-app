@@ -1,6 +1,7 @@
 import type { IDailyWeather } from "../../../api/domain/entities/IDailyWeather";
 import type { Units } from "../../../context/UnitsContextProvider";
 import useDisplayTemperature from "../../../hooks/useDisplayTemperature";
+import datePartsExtractor from "../../../utils/DatePartsExtractor";
 import weatherCodeToImageUrl from "../../../utils/weather/weatherCodeToImageUrl";
 
 interface Props {
@@ -17,7 +18,7 @@ function DailyWeatherCell({ dailyWeather, units }: Props) {
       data-testid={"daily-weather-cell"}
     >
       <p className="text-lg font-medium text-text">
-        {processDate(dailyWeather.date)}
+        {datePartsExtractor.getDayPartialText(dailyWeather.date)}
       </p>
       <img
         src={weatherCodeToImageUrl(dailyWeather.weatherCode)}
@@ -35,14 +36,6 @@ function DailyWeatherCell({ dailyWeather, units }: Props) {
       </div>
     </div>
   );
-}
-
-function processDate(date: string) {
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  const currentDate = new Date(date);
-
-  return weekDays[currentDate.getDay()];
 }
 
 export default DailyWeatherCell;
