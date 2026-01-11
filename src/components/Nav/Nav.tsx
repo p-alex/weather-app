@@ -60,69 +60,68 @@ function Nav() {
           </button>
         )}
         content={() => (
-          <DropdownMenu
-            className="absolute sm:top-12.5 top-10.5 right-0 z-(--z-dropdown)"
-            data-testid="units-dropdown"
-          >
-            <DropdownMenuButton
-              onClick={
-                unitsType === "metric" ? setImperialUnits : setMetricUnits
-              }
-              autoFocus
-            >
-              {unitsType === "metric"
-                ? "Switch to Imperial"
-                : "Switch to Metric"}
-            </DropdownMenuButton>
-            <DropdownMenuSection title="Temperature">
+          <div className="min-w-53.5 absolute sm:top-12.5 top-10.5 right-0 z-(--z-dropdown)">
+            <DropdownMenu data-testid="units-dropdown">
               <DropdownMenuButton
-                aria-selected={units.temperatureUnit === "celsius"}
-                isSelected={units.temperatureUnit === "celsius"}
-                onClick={() => setTemperatureUnit("celsius")}
+                onClick={
+                  unitsType === "metric" ? setImperialUnits : setMetricUnits
+                }
+                autoFocus
               >
-                Celsius (°C)
+                {unitsType === "metric"
+                  ? "Switch to Imperial"
+                  : "Switch to Metric"}
               </DropdownMenuButton>
-              <DropdownMenuButton
-                aria-selected={units.temperatureUnit === "fahrenheit"}
-                isSelected={units.temperatureUnit === "fahrenheit"}
-                onClick={() => setTemperatureUnit("fahrenheit")}
-              >
-                Fahrenheit (°F)
-              </DropdownMenuButton>
-            </DropdownMenuSection>
-            <DropdownMenuSection title="Wind Speed">
-              <DropdownMenuButton
-                aria-selected={units.windSpeedUnit === "km/h"}
-                isSelected={units.windSpeedUnit === "km/h"}
-                onClick={() => setWindSpeedUnit("km/h")}
-              >
-                km/h
-              </DropdownMenuButton>
-              <DropdownMenuButton
-                aria-selected={units.windSpeedUnit === "mph"}
-                isSelected={units.windSpeedUnit === "mph"}
-                onClick={() => setWindSpeedUnit("mph")}
-              >
-                mph
-              </DropdownMenuButton>
-            </DropdownMenuSection>
-            <DropdownMenuSection title="Precipitation">
-              <DropdownMenuButton
-                aria-selected={units.precipitationUnit === "mm"}
-                isSelected={units.precipitationUnit === "mm"}
-                onClick={() => setPrecipitationUnit("mm")}
-              >
-                Millimeters (mm)
-              </DropdownMenuButton>
-              <DropdownMenuButton
-                aria-selected={units.precipitationUnit === "in"}
-                isSelected={units.precipitationUnit === "in"}
-                onClick={() => setPrecipitationUnit("in")}
-              >
-                Inches (in)
-              </DropdownMenuButton>
-            </DropdownMenuSection>
-          </DropdownMenu>
+              <DropdownMenuSection title="Temperature">
+                <DropdownMenuButton
+                  aria-selected={units.temperatureUnit === "celsius"}
+                  isSelected={units.temperatureUnit === "celsius"}
+                  onClick={() => setTemperatureUnit("celsius")}
+                >
+                  Celsius (°C)
+                </DropdownMenuButton>
+                <DropdownMenuButton
+                  aria-selected={units.temperatureUnit === "fahrenheit"}
+                  isSelected={units.temperatureUnit === "fahrenheit"}
+                  onClick={() => setTemperatureUnit("fahrenheit")}
+                >
+                  Fahrenheit (°F)
+                </DropdownMenuButton>
+              </DropdownMenuSection>
+              <DropdownMenuSection title="Wind Speed">
+                <DropdownMenuButton
+                  aria-selected={units.windSpeedUnit === "km/h"}
+                  isSelected={units.windSpeedUnit === "km/h"}
+                  onClick={() => setWindSpeedUnit("km/h")}
+                >
+                  km/h
+                </DropdownMenuButton>
+                <DropdownMenuButton
+                  aria-selected={units.windSpeedUnit === "mph"}
+                  isSelected={units.windSpeedUnit === "mph"}
+                  onClick={() => setWindSpeedUnit("mph")}
+                >
+                  mph
+                </DropdownMenuButton>
+              </DropdownMenuSection>
+              <DropdownMenuSection title="Precipitation">
+                <DropdownMenuButton
+                  aria-selected={units.precipitationUnit === "mm"}
+                  isSelected={units.precipitationUnit === "mm"}
+                  onClick={() => setPrecipitationUnit("mm")}
+                >
+                  Millimeters (mm)
+                </DropdownMenuButton>
+                <DropdownMenuButton
+                  aria-selected={units.precipitationUnit === "in"}
+                  isSelected={units.precipitationUnit === "in"}
+                  onClick={() => setPrecipitationUnit("in")}
+                >
+                  Inches (in)
+                </DropdownMenuButton>
+              </DropdownMenuSection>
+            </DropdownMenu>
+          </div>
         )}
       />
     </nav>

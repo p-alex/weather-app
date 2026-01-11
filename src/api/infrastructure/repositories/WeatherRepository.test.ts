@@ -61,7 +61,7 @@ describe("WeatherRepository.ts", () => {
     expect(result).toEqual({
       currentWeather: currentWeatherFixture,
       dailyWeather: [dailyWeatherFixture],
-      hourlyWeather: hourlyWeatherFixture,
+      hourlyWeather: [hourlyWeatherFixture],
     } as Awaited<ReturnType<WeatherRepository["getAllData"]>>);
   });
 

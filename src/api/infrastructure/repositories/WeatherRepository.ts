@@ -15,7 +15,7 @@ export class WeatherRepository {
 
     let currentWeather: ICurrentWeather | null = null;
     let dailyWeather: IDailyWeather[] | null = null;
-    let hourlyWeather: IHourlyWeather | null = null;
+    let hourlyWeather: IHourlyWeather[] | null = null;
 
     const { success: isValidCurrentWeather } = currentWeatherExternal.safeParse(
       response.current

@@ -15,7 +15,7 @@ describe("GetWeatherUsecase.ts", () => {
     {
       currentWeather: currentWeatherFixture,
       dailyWeather: [dailyWeatherFixture],
-      hourlyWeather: hourlyWeatherFixture,
+      hourlyWeather: [hourlyWeatherFixture],
     };
 
   beforeEach(() => {
@@ -38,6 +38,7 @@ describe("GetWeatherUsecase.ts", () => {
     (getAllDataMock as Mock).mockResolvedValue(repositoryResult);
 
     const result = await getWeatherUsecaseMock.execute(1, 1);
+    console.log(result);
 
     expect(result).toEqual(repositoryResult);
   });

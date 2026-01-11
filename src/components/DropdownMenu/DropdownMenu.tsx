@@ -9,7 +9,7 @@ function DropdownMenu({ children, className, ...containerProps }: Props) {
     <div
       {...containerProps}
       className={twMerge(
-        "px-2 py-1.5 bg-ui rounded-ui-container border border-ui-border min-w-53.5 flex flex-col ",
+        "px-2 py-1.5 bg-ui rounded-ui-container border border-ui-border w-full flex flex-col",
         className
       )}
     >

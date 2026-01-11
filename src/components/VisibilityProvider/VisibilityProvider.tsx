@@ -7,6 +7,7 @@ type ToggleProps = {
 
 type ContentProps = {
   toggleVisibilityOff: () => void;
+  toggleHeight: number;
 };
 
 interface Props {
@@ -62,9 +63,13 @@ function VisibilityProvider({ toggle, content }: Props) {
   }, [handleEscKey, handleClickOutside]);
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="relative">
       {toggle({ toggleVisibility, toggleRef })}
-      {isVisible && content({ toggleVisibilityOff })}
+      {isVisible &&
+        content({
+          toggleVisibilityOff,
+          toggleHeight: toggleRef.current?.getBoundingClientRect().height ?? 0,
+        })}
     </div>
   );
 }

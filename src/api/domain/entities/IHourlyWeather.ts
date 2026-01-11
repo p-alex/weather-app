@@ -1,5 +1,5 @@
 export interface IHourlyWeather {
-  hours: string[];
-  temperatures: number[];
-  weatherCodes: number[];
+  date: string;
+  temperature: number;
+  weatherCode: number;
 }

@@ -25,7 +25,11 @@ export class GetWeatherUsecase {
         "Weather data coming from the API is no longer supported. Please try again later."
       );
 
-    return result;
+    return {
+      currentWeather: result.currentWeather,
+      dailyWeather: result.dailyWeather,
+      hourlyWeather: result.hourlyWeather,
+    };
   };
 }
 

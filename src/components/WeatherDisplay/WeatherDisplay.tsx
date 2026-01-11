@@ -9,6 +9,7 @@ import CurrentWeatherSection from "./currentWeather/CurrentWeatherSection";
 import useUnitsContext from "../../context/useUnitsContext";
 import { useQueryClient } from "@tanstack/react-query";
 import DailyWeatherSection from "./dailyWeather/DailyWeatherSection";
+import HourlyWeatherSection from "./hourlyWeather/HourlyWeatherSection";
 
 function WeatherDisplay() {
   const queryClient = useQueryClient();
@@ -43,29 +44,28 @@ function WeatherDisplay() {
           {currentLocation && (
             <div className="flex flex-col gap-8">
               <div
-                className="w-full grid grid-cols-3 grid-rows-2 gap-8"
+                className="w-full grid grid-cols-[1fr_1fr_384px] gap-8 justify-start auto-rows-auto"
                 data-testid="weather-data-container"
               >
-                <div className="col-span-3 min-[1121px]:col-span-2">
+                <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
                   <CurrentWeatherSection
-                    currentWeather={
-                      weather.data?.currentWeather
-                        ? weather.data.currentWeather
-                        : null
-                    }
+                    currentWeather={weather.data?.currentWeather ?? null}
                     currentLocation={currentLocation}
                     units={units}
                     isLoading={weather.isLoading}
                   />
                 </div>
-                <div className="col-span-3 min-[1121px]:col-span-2 row">
+                <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
                   <DailyWeatherSection
-                    dailyWeather={
-                      weather.data?.dailyWeather
-                        ? weather.data.dailyWeather
-                        : null
-                    }
+                    dailyWeather={weather.data?.dailyWeather ?? null}
                     units={units}
+                  />
+                </div>
+                <div className="col-span-3 min-[1121px]:col-start-3 min-[1121px]:col-span-1 min-[1121px]:row-start-1 min-[1121px]:row-span-2">
+                  <HourlyWeatherSection
+                    hourlyWeather={weather.data?.hourlyWeather ?? null}
+                    todayDate={new Date()}
+                    isLoading={weather.isLoading}
                   />
                 </div>
               </div>
