@@ -44,7 +44,7 @@ function WeatherDisplay() {
           {currentLocation && (
             <div className="flex flex-col gap-8">
               <div
-                className="w-full grid grid-cols-[1fr_1fr_384px] gap-8 justify-start auto-rows-auto"
+                className="w-full grid grid-cols-[1fr_1fr_384px] gap-x-8 gap-y-8 min-[1121px]:gap-y-12 justify-start auto-rows-auto"
                 data-testid="weather-data-container"
               >
                 <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
