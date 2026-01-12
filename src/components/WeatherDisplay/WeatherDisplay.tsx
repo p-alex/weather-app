@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import SearchLocationForm from "./SearchLocationForm";
 import type { ILocation } from "../../api/domain/entities/ILocation";
@@ -10,6 +10,7 @@ import useUnitsContext from "../../context/useUnitsContext";
 import { useQueryClient } from "@tanstack/react-query";
 import DailyWeatherSection from "./dailyWeather/DailyWeatherSection";
 import HourlyWeatherSection from "./hourlyWeather/HourlyWeatherSection";
+import localstorage from "../../utils/Localstorage";
 
 function WeatherDisplay() {
   const queryClient = useQueryClient();
@@ -31,6 +32,19 @@ function WeatherDisplay() {
       ],
     });
   };
+
+  useEffect(() => {
+    const lastSearchedLocation = localstorage.get<ILocation>(
+      "lastSearchedLocation"
+    );
+    if (!lastSearchedLocation) return;
+    setCurrentLocation(lastSearchedLocation);
+  }, []);
+
+  useEffect(() => {
+    if (currentLocation)
+      localstorage.set("lastSearchedLocation", currentLocation);
+  }, [currentLocation]);
 
   return (
     <div className="mb-4">

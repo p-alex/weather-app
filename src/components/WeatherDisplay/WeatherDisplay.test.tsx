@@ -62,6 +62,7 @@ describe("WeatherDisplay.tsx", () => {
 
   afterEach(() => {
     server.resetHandlers();
+    window.localStorage.clear();
   });
 
   afterAll(() => {
@@ -125,5 +126,30 @@ describe("WeatherDisplay.tsx", () => {
       screen.getByText(`${locationFixture.name}, ${locationFixture.country}`)
     ).toBeInTheDocument();
     expect(screen.queryByText("Something went wrong")).not.toBeInTheDocument();
+  });
+
+  it("should display weather data for the last searched location automatically", () => {
+    window.localStorage.setItem(
+      "lastSearchedLocation",
+      JSON.stringify(locationFixture)
+    );
+
+    render(<WeatherDisplay />, { wrapper: createWrapper() });
+
+    const weatherDataContainer = screen.getByTestId("weather-data-container");
+
+    expect(weatherDataContainer).toBeInTheDocument();
+  });
+
+  it("should save the last searched location to localstorage", async () => {
+    render(<WeatherDisplay />, { wrapper: createWrapper() });
+
+    await handleSearch();
+
+    const lastSearchedLocation = window.localStorage.getItem(
+      "lastSearchedLocation"
+    );
+
+    expect(lastSearchedLocation).not.toBeNull();
   });
 });
