@@ -119,3 +119,14 @@
     @apply text-[52px] font-bold font-bricolage leading-15;
   }
 }
+
+@keyframes fade-in-from-top {
+  0% {
+    transform: translateY(-0.5rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
