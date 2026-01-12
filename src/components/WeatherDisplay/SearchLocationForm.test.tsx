@@ -207,4 +207,26 @@ describe("SearchLocationForm.tsx", () => {
 
     expect(message).toBeInTheDocument();
   });
+
+  it("should clear search input after selecting a location", async () => {
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
+
+    const input = screen.getByRole("textbox");
+
+    await userEvent.type(input, "bu");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await userEvent.click(searchButton);
+
+    const locationButton = screen.getByRole("button", {
+      name: `${getLocationUsecaseResponseFixture[0].name}, ${getLocationUsecaseResponseFixture[0].country}`,
+    });
+
+    await userEvent.click(locationButton);
+
+    expect(input).toHaveValue("");
+  });
 });

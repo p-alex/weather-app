@@ -28,6 +28,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
 
   const selectLocation = (location: ILocation) => {
     setQuery("");
+    setSearchValue("");
     formRef.current?.reset();
     onLocationSelect(location);
   };
