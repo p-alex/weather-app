@@ -90,7 +90,7 @@ function HourlyWeatherSection({ hourlyWeather, todayDate, isLoading }: Props) {
             return (
               <div
                 style={{ top: `calc(${toggleHeight}px + 10px)` }}
-                className="absolute w-auto min-w-53.5 top-2.5 z-10 right-0"
+                className="absolute w-auto min-w-53.5 z-10 right-0"
               >
                 <DropdownMenu
                   className="top-2.5 right-0 w-full p-2"

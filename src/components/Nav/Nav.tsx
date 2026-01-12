@@ -59,8 +59,11 @@ function Nav() {
             </picture>
           </button>
         )}
-        content={() => (
-          <div className="min-w-53.5 absolute sm:top-12.5 top-10.5 right-0 z-(--z-dropdown)">
+        content={({ toggleHeight }) => (
+          <div
+            style={{ top: `calc(${toggleHeight}px + 10px)` }}
+            className="min-w-53.5 absolute sm:top-12.5 right-0 z-(--z-dropdown)"
+          >
             <DropdownMenu data-testid="units-dropdown">
               <DropdownMenuButton
                 onClick={
