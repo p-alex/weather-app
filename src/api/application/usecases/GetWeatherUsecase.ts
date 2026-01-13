@@ -15,12 +15,7 @@ export class GetWeatherUsecase {
       longitude
     );
 
-    const isResultInvalid =
-      result.currentWeather === null ||
-      result.dailyWeather === null ||
-      result.hourlyWeather === null;
-
-    if (isResultInvalid)
+    if (result === null)
       throw new AppException(
         "Weather data coming from the API is no longer supported. Please try again later."
       );

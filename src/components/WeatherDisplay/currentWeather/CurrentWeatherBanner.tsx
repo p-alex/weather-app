@@ -1,18 +1,19 @@
+import { useRef } from "react";
 import type { ICurrentWeather } from "../../../api/domain/entities/ICurrentWeather";
 import type { ILocation } from "../../../api/domain/entities/ILocation";
 import type { Units } from "../../../context/UnitsContextProvider";
 import useDisplayTemperature from "../../../hooks/useDisplayTemperature";
+import convertTimezone from "../../../utils/convertTimezone";
 import datePartsExtractor from "../../../utils/DatePartsExtractor";
 import weatherCodeToImageUrl from "../../../utils/weather/weatherCodeToImageUrl";
+import { currentTimezone } from "../../../utils/currentTimezone";
 
 interface Props {
-  currentLocation: ILocation | null;
+  currentLocation: ILocation;
   currentWeather: ICurrentWeather | null;
   units: Units;
   isLoading: boolean;
 }
-
-const today = new Date();
 
 function CurrentWeatherBanner({
   currentLocation,
@@ -22,12 +23,19 @@ function CurrentWeatherBanner({
 }: Props) {
   const displayTemperature = useDisplayTemperature(units);
 
+  const locationDate = useRef<Date>(
+    convertTimezone({
+      date: new Date(),
+      fromTimezone: currentTimezone,
+      toTimezone: currentLocation.timezone,
+    })
+  ).current;
+
   const bannerBg = isLoading
     ? "bg-none bg-ui min-[747px]:bg-none"
     : "bg-[url(/images/bg-today-small.svg)] min-[747px]:bg-[url(/images/bg-today-large.svg)] bg-no-repeat bg-cover bg-center";
 
-  const canShowData =
-    !isLoading && currentLocation !== null && currentWeather !== null;
+  const canShowData = !isLoading && currentWeather !== null;
 
   return (
     <div
@@ -42,12 +50,12 @@ function CurrentWeatherBanner({
             </h2>
             <p className="font-medium text-text text-lg opacity-80 leading-[100%]">
               {`${datePartsExtractor.getDayFullText(
-                today
+                locationDate
               )}, ${datePartsExtractor.getMonthPartialText(
-                today
+                locationDate
               )} ${datePartsExtractor.getDay(
-                today
-              )}, ${datePartsExtractor.getYear(today)}`}
+                locationDate
+              )}, ${datePartsExtractor.getYear(locationDate)}`}
             </p>
           </div>
           <div className="flex items-center gap-5 max-[315px]:flex-col">

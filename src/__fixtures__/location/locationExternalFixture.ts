@@ -1,4 +1,5 @@
 import type { LocationExternal } from "../../api/infrastructure/dtos/LocationExternal";
+import { timezoneFixture } from "./timezoneFixture";
 
 const locationExternalFixture: LocationExternal = {
   id: 1850147,
@@ -6,6 +7,7 @@ const locationExternalFixture: LocationExternal = {
   latitude: 35.6895,
   longitude: 139.69171,
   country: "Japan",
+  timezone: timezoneFixture,
 };
 
 export default locationExternalFixture;

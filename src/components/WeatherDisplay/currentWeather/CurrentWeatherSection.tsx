@@ -9,7 +9,7 @@ import CurrentWeatherCell from "./CurrentWeatherCell";
 
 interface Props {
   currentWeather: ICurrentWeather | null;
-  currentLocation: ILocation | null;
+  currentLocation: ILocation;
   units: Units;
   isLoading: boolean;
 }

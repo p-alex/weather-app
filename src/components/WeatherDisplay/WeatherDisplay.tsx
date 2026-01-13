@@ -63,7 +63,9 @@ function WeatherDisplay() {
               >
                 <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
                   <CurrentWeatherSection
-                    currentWeather={weather.data?.currentWeather ?? null}
+                    currentWeather={
+                      weather.data ? weather.data.currentWeather : null
+                    }
                     currentLocation={currentLocation}
                     units={units}
                     isLoading={weather.isLoading}
@@ -71,13 +73,18 @@ function WeatherDisplay() {
                 </div>
                 <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
                   <DailyWeatherSection
-                    dailyWeather={weather.data?.dailyWeather ?? null}
+                    dailyWeather={
+                      weather.data ? weather.data.dailyWeather : null
+                    }
                     units={units}
                   />
                 </div>
                 <div className="col-span-3 min-[1121px]:col-start-3 min-[1121px]:col-span-1 min-[1121px]:row-start-1 min-[1121px]:row-span-2">
                   <HourlyWeatherSection
-                    hourlyWeather={weather.data?.hourlyWeather ?? null}
+                    hourlyWeather={
+                      weather.data ? weather.data.hourlyWeather : null
+                    }
+                    currentLocationTimezone={currentLocation.timezone}
                     todayDate={new Date()}
                     isLoading={weather.isLoading}
                   />

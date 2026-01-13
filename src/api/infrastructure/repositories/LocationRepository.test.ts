@@ -1,18 +1,13 @@
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { LocationRepository } from "./LocationRepository";
+import locationExternalFixture from "../../../__fixtures__/location/locationExternalFixture";
 
 const server = setupServer(
   http.get("https://geocoding-api.open-meteo.com/v1/search", () => {
     return HttpResponse.json({
       results: [
-        {
-          id: 1,
-          name: "Tokyo",
-          country: "Japan",
-          latitude: 1,
-          longitude: 1,
-        },
+        locationExternalFixture,
         {
           invalid: "invalid",
         },

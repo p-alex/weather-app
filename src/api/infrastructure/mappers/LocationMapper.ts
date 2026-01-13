@@ -9,6 +9,7 @@ class LocationMapper {
       longitude: locationExternal.longitude,
       country: locationExternal.country,
       name: locationExternal.name,
+      timezone: locationExternal.timezone,
     };
   };
 }

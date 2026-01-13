@@ -4,4 +4,5 @@ export interface ILocation {
   country: string;
   latitude: number;
   longitude: number;
+  timezone: string;
 }

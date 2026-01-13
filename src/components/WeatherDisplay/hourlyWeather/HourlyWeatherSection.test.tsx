@@ -5,8 +5,9 @@ import { daysFullStr } from "../../../utils/DatePartsExtractor";
 import UnitsContextProvider from "../../../context/UnitsContextProvider";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { timezoneFixture } from "../../../__fixtures__/location/timezoneFixture";
 
-const today = new Date(2026, 0, 12, 19); // Monday
+const today = new Date(2026, 0, 12, 1); // Monday
 
 const hours = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -52,6 +53,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={null}
+        currentLocationTimezone={timezoneFixture}
         todayDate={today}
         isLoading={true}
       />
@@ -66,6 +68,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={null}
+        currentLocationTimezone={timezoneFixture}
         todayDate={today}
         isLoading={true}
       />
@@ -80,6 +83,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
+        currentLocationTimezone={timezoneFixture}
         todayDate={today}
         isLoading={false}
       />,
@@ -95,6 +99,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
+        currentLocationTimezone={timezoneFixture}
         todayDate={today}
         isLoading={false}
       />,
@@ -116,6 +121,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
+        currentLocationTimezone={timezoneFixture}
         todayDate={today}
         isLoading={false}
       />,
@@ -144,6 +150,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
+        currentLocationTimezone={timezoneFixture}
         todayDate={today}
         isLoading={false}
       />,

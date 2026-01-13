@@ -6,6 +6,7 @@ const locationExternal = z.object({
   latitude: z.number(),
   longitude: z.number(),
   country: z.string(),
+  timezone: z.string(),
 });
 
 export default locationExternal;

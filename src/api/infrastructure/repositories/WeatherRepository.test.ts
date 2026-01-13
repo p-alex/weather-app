@@ -48,21 +48,20 @@ describe("WeatherRepository.ts", () => {
 
     const result = await weatherRepository.getAllData(1, 1);
 
-    expect(result).toEqual({
-      currentWeather: null,
-      dailyWeather: null,
-      hourlyWeather: null,
-    } as Awaited<ReturnType<WeatherRepository["getAllData"]>>);
+    expect(result).toEqual(null);
   });
 
   it("should return weather data if all validations passed", async () => {
     const result = await weatherRepository.getAllData(1, 1);
 
-    expect(result).toEqual({
-      currentWeather: currentWeatherFixture,
-      dailyWeather: [dailyWeatherFixture],
-      hourlyWeather: [hourlyWeatherFixture],
-    } as Awaited<ReturnType<WeatherRepository["getAllData"]>>);
+    const expectedResult: Awaited<ReturnType<WeatherRepository["getAllData"]>> =
+      {
+        currentWeather: currentWeatherFixture,
+        dailyWeather: [dailyWeatherFixture],
+        hourlyWeather: [hourlyWeatherFixture],
+      };
+
+    expect(result).toEqual(expectedResult);
   });
 
   it("should propagate errors", async () => {

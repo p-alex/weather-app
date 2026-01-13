@@ -9,10 +9,13 @@ import datePartsExtractor, {
   daysFullStr,
   type DaysFullStr,
 } from "../../../utils/DatePartsExtractor";
+import convertTimezone from "../../../utils/convertTimezone";
+import { currentTimezone } from "../../../utils/currentTimezone";
 
 interface Props {
-  hourlyWeather: GetWeatherUsecaseResult["hourlyWeather"];
+  hourlyWeather: GetWeatherUsecaseResult["hourlyWeather"] | null;
   todayDate: Date;
+  currentLocationTimezone: string;
   isLoading: boolean;
 }
 
@@ -21,8 +24,19 @@ type HourlyWeatherGroupedByDate = { [key: string]: IHourlyWeather[] };
 const scrollableContainerId = "hourly-scrollable-container";
 const currentHourCellId = "current-hour-cell";
 
-function HourlyWeatherSection({ hourlyWeather, todayDate, isLoading }: Props) {
-  const currentDay = datePartsExtractor.getDayFullText(todayDate);
+function HourlyWeatherSection({
+  hourlyWeather,
+  todayDate,
+  currentLocationTimezone,
+  isLoading,
+}: Props) {
+  const todayLocationDate = convertTimezone({
+    date: todayDate,
+    fromTimezone: currentTimezone,
+    toTimezone: currentLocationTimezone,
+  });
+
+  const currentDay = datePartsExtractor.getDayFullText(todayLocationDate);
 
   const [groupedHourlyWeather, setGroupedHourlyWeather] =
     useState<HourlyWeatherGroupedByDate | null>(null);
@@ -140,12 +154,12 @@ function HourlyWeatherSection({ hourlyWeather, todayDate, isLoading }: Props) {
           groupedHourlyWeather[selectedDay].map((weatherData) => {
             const currentDate = new Date(weatherData.date);
 
-            const todayHour = todayDate.getHours();
+            const todayHour = todayLocationDate.getHours();
             const currentHour = currentDate.getHours();
 
             const isCurrentHour = todayHour === currentHour;
             const isEarlierThenCurrentHour =
-              currentHour < todayHour && currentDate < todayDate;
+              currentHour < todayHour && currentDate < todayLocationDate;
 
             return (
               <li
