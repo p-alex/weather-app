@@ -166,4 +166,39 @@ describe("HourlyWeatherSection.tsx", () => {
 
     expect(screen.queryByTestId("days-dropdown")).not.toBeInTheDocument();
   });
+
+  it("should reduce opacity for hours that are in the past and on the same day", async () => {
+    render(
+      <HourlyWeatherSection
+        hourlyWeather={testData}
+        currentLocation={locationFixture}
+        isLoading={false}
+      />,
+      { wrapper }
+    );
+
+    const todayListItems = screen.getAllByRole("listitem");
+
+    todayListItems.forEach((listItem, index) => {
+      if (index !== todayListItems.length - 1) {
+        expect(listItem.classList.contains("opacity-75")).toBe(true);
+      } else {
+        expect(listItem.classList.contains("opacity-100")).toBe(true);
+      }
+    });
+
+    const toggle = screen.getByRole("button", { name: /thursday/i });
+
+    await userEvent.click(toggle);
+
+    const fridayButton = screen.getByRole("button", { name: /friday/i });
+
+    await userEvent.click(fridayButton);
+
+    const fridayListItems = screen.getAllByRole("listitem");
+
+    fridayListItems.forEach((listItem) => {
+      expect(listItem.classList.contains("opacity-100")).toBe(true);
+    });
+  });
 });

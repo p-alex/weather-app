@@ -185,6 +185,7 @@ function HourlyWeatherSection({
         {!isLoading &&
           state.groupedHourlyWeather &&
           state.selectedDay &&
+          state.locationDate &&
           (state.groupedHourlyWeather[state.selectedDay] ?? []).map(
             (weatherData) => {
               const todayLocationHour = state.locationDate!.getHours();
@@ -197,7 +198,8 @@ function HourlyWeatherSection({
               const isCurrentHour = todayLocationHour === weatherDataHour;
 
               const isEarlierThenCurrentHour =
-                weatherDataHour < todayLocationHour;
+                weatherDataHour < todayLocationHour &&
+                new Date(weatherData.date) < state.locationDate!;
 
               return (
                 <li
