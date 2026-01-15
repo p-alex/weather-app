@@ -5,14 +5,16 @@ import { daysFullStr } from "../../../utils/DatePartsExtractor";
 import UnitsContextProvider from "../../../context/UnitsContextProvider";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { timezoneFixture } from "../../../__fixtures__/location/timezoneFixture";
+import locationFixture from "../../../__fixtures__/location/locationEntityFixture";
 
-const today = new Date(2026, 0, 12, 1); // Monday
+const today = new Date(2026, 0, 15, 1); // Monday
 
 const hours = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
   22, 23,
 ];
+
+vi.spyOn(Date, "now").mockReturnValue(1768484840753); // Thu Jan 15 2026 15:48:17 GMT+0200 (Eastern European Standard Time)
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <UnitsContextProvider>{children}</UnitsContextProvider>;
@@ -43,6 +45,7 @@ describe("HourlyWeatherSection.tsx", () => {
   beforeAll(() => {
     HTMLElement.prototype.scrollTo = vi.fn();
     HTMLElement.prototype.scrollIntoView = vi.fn();
+    Window.prototype.scrollTo = vi.fn();
   });
 
   afterEach(() => {
@@ -53,8 +56,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={null}
-        currentLocationTimezone={timezoneFixture}
-        todayDate={today}
+        currentLocation={locationFixture}
         isLoading={true}
       />
     );
@@ -67,9 +69,8 @@ describe("HourlyWeatherSection.tsx", () => {
   it("should display 24 cell skeletons if isLoading is set to true", () => {
     render(
       <HourlyWeatherSection
-        hourlyWeather={null}
-        currentLocationTimezone={timezoneFixture}
-        todayDate={today}
+        hourlyWeather={testData}
+        currentLocation={locationFixture}
         isLoading={true}
       />
     );
@@ -83,8 +84,7 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
-        currentLocationTimezone={timezoneFixture}
-        todayDate={today}
+        currentLocation={locationFixture}
         isLoading={false}
       />,
       { wrapper }
@@ -99,20 +99,19 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
-        currentLocationTimezone={timezoneFixture}
-        todayDate={today}
+        currentLocation={locationFixture}
         isLoading={false}
       />,
       { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /monday/i });
+    const toggle = screen.getByRole("button", { name: /thursday/i });
 
     await userEvent.click(toggle);
 
-    const tuesdayButton = screen.getByRole("button", { name: /tuesday/i });
+    const fridayButton = screen.getByRole("button", { name: /friday/i });
 
-    await userEvent.click(tuesdayButton);
+    await userEvent.click(fridayButton);
 
     expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith({ top: 0 });
   });
@@ -121,14 +120,13 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
-        currentLocationTimezone={timezoneFixture}
-        todayDate={today}
+        currentLocation={locationFixture}
         isLoading={false}
       />,
       { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /monday/i });
+    const toggle = screen.getByRole("button", { name: /thursday/i });
 
     await userEvent.click(toggle);
 
@@ -136,13 +134,13 @@ describe("HourlyWeatherSection.tsx", () => {
     const buttons = within(dropdown).getAllByRole("button");
 
     expect(buttons.map((b) => b.textContent)).toEqual([
-      "Monday",
-      "Tuesday",
-      "Wednesday",
       "Thursday",
       "Friday",
       "Saturday",
       "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
     ]);
   });
 
@@ -150,22 +148,21 @@ describe("HourlyWeatherSection.tsx", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
-        currentLocationTimezone={timezoneFixture}
-        todayDate={today}
+        currentLocation={locationFixture}
         isLoading={false}
       />,
       { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /monday/i });
+    const toggle = screen.getByRole("button", { name: /thursday/i });
 
     await userEvent.click(toggle);
 
     expect(screen.getByTestId("days-dropdown")).toBeInTheDocument();
 
-    const tuesdayButton = screen.getByRole("button", { name: /tuesday/i });
+    const fridayButton = screen.getByRole("button", { name: /friday/i });
 
-    await userEvent.click(tuesdayButton);
+    await userEvent.click(fridayButton);
 
     expect(screen.queryByTestId("days-dropdown")).not.toBeInTheDocument();
   });

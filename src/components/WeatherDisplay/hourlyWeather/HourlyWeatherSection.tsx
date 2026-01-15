@@ -1,21 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
 import type { GetWeatherUsecaseResult } from "../../../api/application/usecases/GetWeatherUsecase";
 import DropdownMenu from "../../DropdownMenu/DropdownMenu";
-import DropdownMenuButton from "../../DropdownMenu/DropdownMenuButton";
 import VisibilityProvider from "../../VisibilityProvider/VisibilityProvider";
-import HourlyWeatherCell from "./HourlyWeatherCell";
 import type { IHourlyWeather } from "../../../api/domain/entities/IHourlyWeather";
 import datePartsExtractor, {
   daysFullStr,
   type DaysFullStr,
 } from "../../../utils/DatePartsExtractor";
+import type { ILocation } from "../../../api/domain/entities/ILocation";
+import { useCallback, useEffect, useState } from "react";
 import convertTimezone from "../../../utils/convertTimezone";
 import { currentTimezone } from "../../../utils/currentTimezone";
+import DropdownMenuButton from "../../DropdownMenu/DropdownMenuButton";
+import HourlyWeatherCell from "./HourlyWeatherCell";
 
 interface Props {
   hourlyWeather: GetWeatherUsecaseResult["hourlyWeather"] | null;
-  todayDate: Date;
-  currentLocationTimezone: string;
+  currentLocation: ILocation;
   isLoading: boolean;
 }
 
@@ -24,37 +24,62 @@ type HourlyWeatherGroupedByDate = { [key: string]: IHourlyWeather[] };
 const scrollableContainerId = "hourly-scrollable-container";
 const currentHourCellId = "current-hour-cell";
 
+interface IState {
+  locationDate: Date | undefined;
+  selectedDay: DaysFullStr[number] | undefined;
+  groupedHourlyWeather: { [key: string]: IHourlyWeather[] };
+  isReady: boolean;
+}
+
 function HourlyWeatherSection({
-  hourlyWeather,
-  todayDate,
-  currentLocationTimezone,
   isLoading,
+  hourlyWeather,
+  currentLocation,
 }: Props) {
-  const todayLocationDate = convertTimezone({
-    date: todayDate,
-    fromTimezone: currentTimezone,
-    toTimezone: currentLocationTimezone,
+  const [state, setState] = useState<IState>({
+    locationDate: undefined,
+    selectedDay: undefined,
+    groupedHourlyWeather: {},
+    isReady: false,
   });
-
-  const currentDay = datePartsExtractor.getDayFullText(todayLocationDate);
-
-  const [groupedHourlyWeather, setGroupedHourlyWeather] =
-    useState<HourlyWeatherGroupedByDate | null>(null);
 
   useEffect(() => {
     if (!hourlyWeather) return;
-    setGroupedHourlyWeather(groupHourlyWeatherByDate(hourlyWeather));
-  }, [hourlyWeather]);
 
-  const [selectedDay, setSelectedDay] =
-    useState<DaysFullStr[number]>(currentDay);
+    const todayDate = new Date(Date.now());
+
+    const locationDate = convertTimezone({
+      date: todayDate,
+      fromTimezone: currentTimezone,
+      toTimezone: currentLocation.timezone,
+    });
+
+    setState((prev) => ({
+      ...prev,
+      locationDate,
+      selectedDay: datePartsExtractor.getDayFullText(locationDate),
+      groupedHourlyWeather: groupHourlyWeatherByDate(hourlyWeather),
+    }));
+  }, [hourlyWeather, currentLocation]);
+
+  useEffect(() => {
+    const isReady =
+      state.locationDate instanceof Date &&
+      state.selectedDay !== undefined &&
+      Object.keys(state.groupedHourlyWeather).length !== 0;
+
+    setState((prev) => ({ ...prev, isReady }));
+  }, [state.locationDate, state.selectedDay, state.groupedHourlyWeather]);
 
   const handleScrollCurrentHourCellIntoView = useCallback(() => {
     const currentHourCell = document.getElementById(
       currentHourCellId
     ) as HTMLLIElement | null;
+
     const prevWindowScrollY = window.scrollY;
+
     currentHourCell?.scrollIntoView({ block: "start" });
+
     window.scrollTo({ top: prevWindowScrollY });
   }, []);
 
@@ -62,18 +87,21 @@ function HourlyWeatherSection({
     const scrollableContainer = document.getElementById(
       scrollableContainerId
     ) as HTMLDivElement;
+
     scrollableContainer?.scrollTo({ top: 0 });
   }, []);
 
   useEffect(() => {
-    if (selectedDay !== currentDay) return handleScrollToTop();
+    if (!state.isReady) return;
+
+    if (
+      state.selectedDay !==
+      datePartsExtractor.getDayFullText(state.locationDate!)
+    )
+      return handleScrollToTop();
+
     handleScrollCurrentHourCellIntoView();
-  }, [
-    selectedDay,
-    groupedHourlyWeather,
-    handleScrollCurrentHourCellIntoView,
-    handleScrollToTop,
-  ]);
+  }, [state, handleScrollCurrentHourCellIntoView, handleScrollToTop]);
 
   return (
     <section className="w-full h-full py-5 px-4 sm:py-6 sm:px-6 rounded-ui-container bg-ui flex flex-col justify-between gap-4">
@@ -90,7 +118,7 @@ function HourlyWeatherSection({
                 ref={toggleRef}
                 onClick={toggleVisibility}
               >
-                {isLoading ? "-" : selectedDay}
+                {isLoading ? "-" : state.selectedDay}
                 <img
                   src="/images/icon-dropdown.svg"
                   width={12}
@@ -111,20 +139,26 @@ function HourlyWeatherSection({
                   data-testid="days-dropdown"
                 >
                   <div className="flex flex-col gap-1 w-full">
-                    {handleReorderDaysOfTheWeek(currentDay).map((day) => {
-                      return (
-                        <DropdownMenuButton
-                          key={day}
-                          isSelected={day === selectedDay}
-                          onClick={() => {
-                            setSelectedDay(day);
-                            toggleVisibilityOff();
-                          }}
-                        >
-                          {day}
-                        </DropdownMenuButton>
-                      );
-                    })}
+                    {state.isReady &&
+                      handleReorderDaysOfTheWeek(
+                        datePartsExtractor.getDayFullText(state.locationDate!)
+                      ).map((day) => {
+                        return (
+                          <DropdownMenuButton
+                            key={day}
+                            isSelected={day === state.selectedDay}
+                            onClick={() => {
+                              setState((prev) => ({
+                                ...prev,
+                                selectedDay: day,
+                              }));
+                              toggleVisibilityOff();
+                            }}
+                          >
+                            {day}
+                          </DropdownMenuButton>
+                        );
+                      })}
                   </div>
                 </DropdownMenu>
               </div>
@@ -149,17 +183,19 @@ function HourlyWeatherSection({
           })}
 
         {!isLoading &&
-          groupedHourlyWeather !== null &&
-          groupedHourlyWeather[selectedDay] &&
-          groupedHourlyWeather[selectedDay].map((weatherData) => {
-            const currentDate = new Date(weatherData.date);
+          state.isReady &&
+          state.groupedHourlyWeather[state.selectedDay!].map((weatherData) => {
+            const todayLocationHour = state.locationDate!.getHours();
 
-            const todayHour = todayLocationDate.getHours();
-            const currentHour = currentDate.getHours();
+            const weatherDataHour = datePartsExtractor.getHour(
+              weatherData.date,
+              "24Hr"
+            );
 
-            const isCurrentHour = todayHour === currentHour;
+            const isCurrentHour = todayLocationHour === weatherDataHour;
+
             const isEarlierThenCurrentHour =
-              currentHour < todayHour && currentDate < todayLocationDate;
+              weatherDataHour < todayLocationHour;
 
             return (
               <li
@@ -181,7 +217,7 @@ function HourlyWeatherSection({
 function groupHourlyWeatherByDate(
   hourlyWeather: IHourlyWeather[]
 ): HourlyWeatherGroupedByDate {
-  return hourlyWeather!.reduce((acc, curr) => {
+  return hourlyWeather.reduce((acc, curr) => {
     const currentHourlyWeather = curr;
 
     const dayOfTheWeek = datePartsExtractor.getDayFullText(

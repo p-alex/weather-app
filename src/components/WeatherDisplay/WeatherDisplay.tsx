@@ -84,8 +84,7 @@ function WeatherDisplay() {
                     hourlyWeather={
                       weather.data ? weather.data.hourlyWeather : null
                     }
-                    currentLocationTimezone={currentLocation.timezone}
-                    todayDate={new Date()}
+                    currentLocation={currentLocation}
                     isLoading={weather.isLoading}
                   />
                 </div>
