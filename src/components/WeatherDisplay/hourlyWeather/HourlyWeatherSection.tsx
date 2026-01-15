@@ -25,9 +25,9 @@ const scrollableContainerId = "hourly-scrollable-container";
 const currentHourCellId = "current-hour-cell";
 
 interface IState {
-  locationDate: Date | undefined;
-  selectedDay: DaysFullStr[number] | undefined;
-  groupedHourlyWeather: { [key: string]: IHourlyWeather[] };
+  locationDate: Date | null;
+  selectedDay: DaysFullStr[number] | null;
+  groupedHourlyWeather: { [key: string]: IHourlyWeather[] } | null;
   isReady: boolean;
 }
 
@@ -37,9 +37,9 @@ function HourlyWeatherSection({
   currentLocation,
 }: Props) {
   const [state, setState] = useState<IState>({
-    locationDate: undefined,
-    selectedDay: undefined,
-    groupedHourlyWeather: {},
+    locationDate: null,
+    selectedDay: null,
+    groupedHourlyWeather: null,
     isReady: false,
   });
 
@@ -64,9 +64,9 @@ function HourlyWeatherSection({
 
   useEffect(() => {
     const isReady =
-      state.locationDate instanceof Date &&
-      state.selectedDay !== undefined &&
-      Object.keys(state.groupedHourlyWeather).length !== 0;
+      state.locationDate !== null &&
+      state.selectedDay !== null &&
+      state.groupedHourlyWeather !== null;
 
     setState((prev) => ({ ...prev, isReady }));
   }, [state.locationDate, state.selectedDay, state.groupedHourlyWeather]);
@@ -183,32 +183,35 @@ function HourlyWeatherSection({
           })}
 
         {!isLoading &&
-          state.isReady &&
-          state.groupedHourlyWeather[state.selectedDay!].map((weatherData) => {
-            const todayLocationHour = state.locationDate!.getHours();
+          state.groupedHourlyWeather &&
+          state.selectedDay &&
+          (state.groupedHourlyWeather[state.selectedDay] ?? []).map(
+            (weatherData) => {
+              const todayLocationHour = state.locationDate!.getHours();
 
-            const weatherDataHour = datePartsExtractor.getHour(
-              weatherData.date,
-              "24Hr"
-            );
+              const weatherDataHour = datePartsExtractor.getHour(
+                weatherData.date,
+                "24Hr"
+              );
 
-            const isCurrentHour = todayLocationHour === weatherDataHour;
+              const isCurrentHour = todayLocationHour === weatherDataHour;
 
-            const isEarlierThenCurrentHour =
-              weatherDataHour < todayLocationHour;
+              const isEarlierThenCurrentHour =
+                weatherDataHour < todayLocationHour;
 
-            return (
-              <li
-                id={isCurrentHour ? currentHourCellId : undefined}
-                key={weatherData.date}
-                className={`${
-                  isEarlierThenCurrentHour ? "opacity-75" : "opacity-100"
-                }`}
-              >
-                <HourlyWeatherCell hourlyWeather={weatherData} />
-              </li>
-            );
-          })}
+              return (
+                <li
+                  id={isCurrentHour ? currentHourCellId : undefined}
+                  key={weatherData.date}
+                  className={`${
+                    isEarlierThenCurrentHour ? "opacity-75" : "opacity-100"
+                  }`}
+                >
+                  <HourlyWeatherCell hourlyWeather={weatherData} />
+                </li>
+              );
+            }
+          )}
       </ul>
     </section>
   );
