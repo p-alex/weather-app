@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import type { ICurrentWeather } from "../../../api/domain/entities/ICurrentWeather";
 import type { ILocation } from "../../../api/domain/entities/ILocation";
 import type { Units } from "../../../context/UnitsContextProvider";
@@ -23,13 +22,11 @@ function CurrentWeatherBanner({
 }: Props) {
   const displayTemperature = useDisplayTemperature(units);
 
-  const locationDate = useRef<Date>(
-    convertTimezone({
-      date: new Date(),
-      fromTimezone: currentTimezone,
-      toTimezone: currentLocation.timezone,
-    })
-  ).current;
+  const locationDate = convertTimezone({
+    date: new Date(Date.now()),
+    fromTimezone: currentTimezone,
+    toTimezone: currentLocation.timezone,
+  });
 
   const bannerBg = isLoading
     ? "bg-none bg-ui min-[747px]:bg-none"
