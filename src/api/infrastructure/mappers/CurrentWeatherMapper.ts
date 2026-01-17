@@ -2,9 +2,7 @@ import type { ICurrentWeather } from "../../domain/entities/ICurrentWeather";
 import type { CurrentWeatherExternal } from "../dtos/CurrentWeatherExternal";
 
 export class CurrentWeatherMapper {
-  externalToEntity = (
-    currentWeatherExternal: CurrentWeatherExternal
-  ): ICurrentWeather => ({
+  externalToEntity = (currentWeatherExternal: CurrentWeatherExternal): ICurrentWeather => ({
     temperature: currentWeatherExternal.temperature_2m,
     feelsLike: currentWeatherExternal.apparent_temperature,
     windSpeed: currentWeatherExternal.wind_speed_10m,

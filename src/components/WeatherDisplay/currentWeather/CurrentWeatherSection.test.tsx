@@ -2,10 +2,7 @@ import { render, screen } from "@testing-library/react";
 import locationFixture from "../../../__fixtures__/location/locationEntityFixture";
 import { currentWeatherFixture } from "../../../__fixtures__/weather/currentWeatherFixture";
 import CurrentWeatherSection from "./CurrentWeatherSection";
-import {
-  imperialUnitsFixture,
-  metricUnitsFixture,
-} from "../../../__fixtures__/units/unitsFixture";
+import { imperialUnitsFixture, metricUnitsFixture } from "../../../__fixtures__/units/unitsFixture";
 
 describe("CurrentWeatherSection.tsx", () => {
   it("should display weather data correctly based on metric units", async () => {
@@ -18,19 +15,13 @@ describe("CurrentWeatherSection.tsx", () => {
       />
     );
 
-    const temperature = screen.getByText(
-      `${currentWeatherFixture.temperature}°`
-    );
+    const temperature = screen.getByText(`${currentWeatherFixture.temperature}°`);
 
     const humidity = screen.getByText(`${currentWeatherFixture.humidity}%`);
 
-    const windSpeed = screen.getByText(
-      `${Math.round(currentWeatherFixture.windSpeed)} km/h`
-    );
+    const windSpeed = screen.getByText(`${Math.round(currentWeatherFixture.windSpeed)} km/h`);
 
-    const precipitation = screen.getByText(
-      `${currentWeatherFixture.precipitation.toFixed(1)} mm`
-    );
+    const precipitation = screen.getByText(`${currentWeatherFixture.precipitation.toFixed(1)} mm`);
 
     expect(temperature).toBeInTheDocument();
     expect(humidity).toBeInTheDocument();

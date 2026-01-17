@@ -42,10 +42,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
   const isTyping = searchValue !== query;
 
   const shouldShowResults =
-    locations.data &&
-    locations.data.length > 0 &&
-    !locations.isLoading &&
-    !isTyping;
+    locations.data && locations.data.length > 0 && !locations.isLoading && !isTyping;
 
   const shouldShowNoSearchResultsMessage =
     locations.data && locations.data.length === 0 && !locations.isLoading;
@@ -64,14 +61,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
             autoComplete="off"
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
-            icon={
-              <img
-                src="/images/icon-search.svg"
-                width={21}
-                height={21}
-                alt=""
-              />
-            }
+            icon={<img src="/images/icon-search.svg" width={21} height={21} alt="" />}
           />
 
           {locations.isLoading && (
@@ -84,10 +74,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
             <DropdownMenu className="absolute top-[calc(var(--text-field-height)+9px)] left-0 w-full z-(--z-dropdown)">
               {locations.data.map((location) => {
                 return (
-                  <DropdownMenuButton
-                    key={location.id}
-                    onClick={() => selectLocation(location)}
-                  >
+                  <DropdownMenuButton key={location.id} onClick={() => selectLocation(location)}>
                     {`${location.name}, ${location.country}`}
                   </DropdownMenuButton>
                 );
@@ -110,9 +97,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
       )}
 
       {shouldShowNoSearchResultsMessage && (
-        <p className="text-center font-bold text-[28px] text-text">
-          No search result found!
-        </p>
+        <p className="text-center font-bold text-[28px] text-text">No search result found!</p>
       )}
     </div>
   );

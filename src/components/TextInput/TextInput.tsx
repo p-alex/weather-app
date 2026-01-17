@@ -13,11 +13,7 @@ function TextInput({ icon, className, ...inputProps }: Props) {
       )}
     >
       {icon && icon}
-      <input
-        {...inputProps}
-        className="py-4 outline-none w-full h-full"
-        type="text"
-      />
+      <input {...inputProps} className="py-4 outline-none w-full h-full" type="text" />
     </div>
   );
 }

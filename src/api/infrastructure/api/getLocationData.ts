@@ -1,12 +1,9 @@
 import ApiException from "../../exceptions/ApiException";
 import type { GetLocationsResponse } from "../dtos/GetLocationsResponse";
 
-export const GET_LOCATION_DATA_BASE_URL =
-  "https://geocoding-api.open-meteo.com/v1/search";
+export const GET_LOCATION_DATA_BASE_URL = "https://geocoding-api.open-meteo.com/v1/search";
 
-async function getLocationData(
-  searchQuery: string
-): Promise<GetLocationsResponse> {
+async function getLocationData(searchQuery: string): Promise<GetLocationsResponse> {
   const url = `${GET_LOCATION_DATA_BASE_URL}?name=${searchQuery}`;
   const response = await fetch(url);
   if (!response.ok)

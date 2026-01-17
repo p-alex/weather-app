@@ -14,12 +14,7 @@ interface Props {
   isLoading: boolean;
 }
 
-function CurrentWeatherSection({
-  currentWeather,
-  currentLocation,
-  units,
-  isLoading,
-}: Props) {
+function CurrentWeatherSection({ currentWeather, currentLocation, units, isLoading }: Props) {
   const displayTemperature = useDisplayTemperature(units);
   const displayPrecipitation = useDisplayPrecipitation(units);
   const displayWindSpeed = useDisplayWindSpeed(units);
@@ -43,19 +38,13 @@ function CurrentWeatherSection({
         />
         <CurrentWeatherCell
           title="Humidity"
-          value={
-            !isLoading && currentWeather !== null
-              ? `${currentWeather.humidity}%`
-              : "-"
-          }
+          value={!isLoading && currentWeather !== null ? `${currentWeather.humidity}%` : "-"}
         />
         <CurrentWeatherCell
           title="Wind"
           value={
             !isLoading && currentWeather !== null
-              ? `${displayWindSpeed(currentWeather.windSpeed)} ${
-                  units.windSpeedUnit
-                }`
+              ? `${displayWindSpeed(currentWeather.windSpeed)} ${units.windSpeedUnit}`
               : "-"
           }
         />
@@ -63,9 +52,7 @@ function CurrentWeatherSection({
           title="Precipitation"
           value={
             !isLoading && currentWeather !== null
-              ? `${displayPrecipitation(currentWeather.precipitation)} ${
-                  units.precipitationUnit
-                }`
+              ? `${displayPrecipitation(currentWeather.precipitation)} ${units.precipitationUnit}`
               : "-"
           }
         />

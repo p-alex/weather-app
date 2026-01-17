@@ -129,10 +129,7 @@ describe("WeatherDisplay.tsx", () => {
   });
 
   it("should display weather data for the last searched location automatically", () => {
-    window.localStorage.setItem(
-      "lastSearchedLocation",
-      JSON.stringify(locationFixture)
-    );
+    window.localStorage.setItem("lastSearchedLocation", JSON.stringify(locationFixture));
 
     render(<WeatherDisplay />, { wrapper: createWrapper() });
 
@@ -146,9 +143,7 @@ describe("WeatherDisplay.tsx", () => {
 
     await handleSearch();
 
-    const lastSearchedLocation = window.localStorage.getItem(
-      "lastSearchedLocation"
-    );
+    const lastSearchedLocation = window.localStorage.getItem("lastSearchedLocation");
 
     expect(lastSearchedLocation).not.toBeNull();
   });

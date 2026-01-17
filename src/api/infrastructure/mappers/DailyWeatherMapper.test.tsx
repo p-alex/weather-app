@@ -16,9 +16,7 @@ describe("DailyWeatherMapper.tsx", () => {
   });
 
   it("shoud map data properly", () => {
-    const result = dailyWeatherMapper.externalToEntity(
-      dailyWeatherExternalFixture
-    );
+    const result = dailyWeatherMapper.externalToEntity(dailyWeatherExternalFixture);
 
     expect(result).toEqual([
       {

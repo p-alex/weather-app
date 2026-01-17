@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  DatePartsExtractor,
-  daysFullStr,
-  monthsFullStr,
-} from "./DatePartsExtractor";
+import { DatePartsExtractor, daysFullStr, monthsFullStr } from "./DatePartsExtractor";
 
 describe("DatePartsExtractor", () => {
   const extractor = new DatePartsExtractor();

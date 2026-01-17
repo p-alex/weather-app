@@ -31,10 +31,7 @@ function VisibilityProvider({ toggle, content }: Props) {
 
   const handleEscKey = useCallback(
     (event: KeyboardEvent) => {
-      if (
-        event.key === "Escape" &&
-        containerRef.current!.contains(document.activeElement)
-      ) {
+      if (event.key === "Escape" && containerRef.current!.contains(document.activeElement)) {
         toggleVisibilityOff();
         toggleRef.current?.focus();
       }

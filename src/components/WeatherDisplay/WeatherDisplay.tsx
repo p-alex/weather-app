@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import SearchLocationForm from "./SearchLocationForm";
 import type { ILocation } from "../../api/domain/entities/ILocation";
-import useGetWeather, {
-  makeGetWeatherCacheKey,
-} from "../../hooks/useGetWeather";
+import useGetWeather, { makeGetWeatherCacheKey } from "../../hooks/useGetWeather";
 import CurrentWeatherSection from "./currentWeather/CurrentWeatherSection";
 import useUnitsContext from "../../context/useUnitsContext";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,34 +14,24 @@ function WeatherDisplay() {
   const queryClient = useQueryClient();
   const units = useUnitsContext().units;
 
-  const [currentLocation, setCurrentLocation] = useState<ILocation | null>(
-    null
-  );
+  const [currentLocation, setCurrentLocation] = useState<ILocation | null>(null);
 
   const weather = useGetWeather(currentLocation);
 
   const handleRetry = () => {
     queryClient.resetQueries({
-      queryKey: [
-        makeGetWeatherCacheKey(
-          currentLocation?.latitude,
-          currentLocation?.longitude
-        ),
-      ],
+      queryKey: [makeGetWeatherCacheKey(currentLocation?.latitude, currentLocation?.longitude)],
     });
   };
 
   useEffect(() => {
-    const lastSearchedLocation = localstorage.get<ILocation>(
-      "lastSearchedLocation"
-    );
+    const lastSearchedLocation = localstorage.get<ILocation>("lastSearchedLocation");
     if (!lastSearchedLocation) return;
     setCurrentLocation(lastSearchedLocation);
   }, []);
 
   useEffect(() => {
-    if (currentLocation)
-      localstorage.set("lastSearchedLocation", currentLocation);
+    if (currentLocation) localstorage.set("lastSearchedLocation", currentLocation);
   }, [currentLocation]);
 
   return (
@@ -63,9 +51,7 @@ function WeatherDisplay() {
               >
                 <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
                   <CurrentWeatherSection
-                    currentWeather={
-                      weather.data ? weather.data.currentWeather : null
-                    }
+                    currentWeather={weather.data ? weather.data.currentWeather : null}
                     currentLocation={currentLocation}
                     units={units}
                     isLoading={weather.isLoading}
@@ -73,17 +59,13 @@ function WeatherDisplay() {
                 </div>
                 <div className="col-span-3 col-start-1 min-[1121px]:col-span-2 min-[1121px]:row-span-1">
                   <DailyWeatherSection
-                    dailyWeather={
-                      weather.data ? weather.data.dailyWeather : null
-                    }
+                    dailyWeather={weather.data ? weather.data.dailyWeather : null}
                     units={units}
                   />
                 </div>
                 <div className="col-span-3 min-[1121px]:col-start-3 min-[1121px]:col-span-1 min-[1121px]:row-start-1 min-[1121px]:row-span-2">
                   <HourlyWeatherSection
-                    hourlyWeather={
-                      weather.data ? weather.data.hourlyWeather : null
-                    }
+                    hourlyWeather={weather.data ? weather.data.hourlyWeather : null}
                     currentLocation={currentLocation}
                     isLoading={weather.isLoading}
                   />

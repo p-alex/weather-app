@@ -12,9 +12,7 @@ function DropdownMenuButton({ children, isSelected, ...btnProps }: Props) {
       }`}
     >
       {children}
-      {isSelected && (
-        <img src="images/icon-checkmark.svg" width={14} height={11} />
-      )}
+      {isSelected && <img src="images/icon-checkmark.svg" width={14} height={11} />}
     </button>
   );
 }

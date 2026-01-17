@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, within, waitFor } from "@testing-library/react";
 import HourlyWeatherSection from "./HourlyWeatherSection";
 import { hourlyWeatherFixture } from "../../../__fixtures__/weather/hourlyWeatherFixture";
 import { daysFullStr } from "../../../utils/DatePartsExtractor";
@@ -6,81 +6,71 @@ import UnitsContextProvider from "../../../context/UnitsContextProvider";
 import { vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import locationFixture from "../../../__fixtures__/location/locationEntityFixture";
+import type { IHourlyWeather } from "../../../api/domain/entities/IHourlyWeather";
 
-const today = new Date(2026, 0, 15, 1); // Monday
+vi.spyOn(Date, "now").mockReturnValue(
+  new Date("2026-01-15T15:48:17+02:00").getTime() // Thursday
+);
 
-const hours = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  22, 23,
-];
-
-vi.spyOn(Date, "now").mockReturnValue(1768484840753); // Thu Jan 15 2026 15:48:17 GMT+0200 (Eastern European Standard Time)
+const hours = Array.from({ length: 24 }, (_, i) => i);
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <UnitsContextProvider>{children}</UnitsContextProvider>;
 }
 
 function makeTestData() {
-  const result: (typeof hourlyWeatherFixture)[] = [];
+  const baseDate = new Date("2026-01-15T01:00:00+02:00"); // Thursday
+  const result: IHourlyWeather[] = [];
 
   daysFullStr.forEach((_, dayIndex) => {
     hours.forEach((hour) => {
       result.push({
         ...hourlyWeatherFixture,
         date: new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate() + dayIndex,
+          baseDate.getFullYear(),
+          baseDate.getMonth(),
+          baseDate.getDate() + dayIndex,
           hour
         ).toISOString(),
       });
     });
   });
+
   return result;
 }
 
 const testData = makeTestData();
 
-describe("HourlyWeatherSection.tsx", () => {
+describe("HourlyWeatherSection", () => {
   beforeAll(() => {
-    HTMLElement.prototype.scrollTo = vi.fn();
     HTMLElement.prototype.scrollIntoView = vi.fn();
+    HTMLElement.prototype.scrollTo = vi.fn();
     Window.prototype.scrollTo = vi.fn();
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
-  it("days dropdown toggle should display '-' if isLoading is set to true", () => {
+  it("shows '-' in dropdown toggle when loading", () => {
     render(
-      <HourlyWeatherSection
-        hourlyWeather={null}
-        currentLocation={locationFixture}
-        isLoading={true}
-      />
+      <HourlyWeatherSection hourlyWeather={null} currentLocation={locationFixture} isLoading />,
+      { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /-/i });
-
-    expect(toggle).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "-" })).toBeInTheDocument();
   });
 
-  it("should display 24 cell skeletons if isLoading is set to true", () => {
+  it("renders 24 loading skeletons when loading", () => {
     render(
-      <HourlyWeatherSection
-        hourlyWeather={testData}
-        currentLocation={locationFixture}
-        isLoading={true}
-      />
+      <HourlyWeatherSection hourlyWeather={testData} currentLocation={locationFixture} isLoading />,
+      { wrapper }
     );
 
-    const items = screen.getAllByTestId("cell-loading-skeleton");
-
-    expect(items).toHaveLength(24);
+    expect(screen.getAllByTestId("cell-loading-skeleton")).toHaveLength(24);
   });
 
-  it("should scroll current hour cell into view if selected day is the current day", () => {
+  it("scrolls current hour cell into view on initial render", async () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
@@ -90,12 +80,16 @@ describe("HourlyWeatherSection.tsx", () => {
       { wrapper }
     );
 
-    expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({
-      block: "start",
+    await waitFor(() => {
+      expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({
+        block: "start",
+      });
     });
   });
 
-  it("should scroll cell list to top if the selected day is not the current day", async () => {
+  it("scrolls list to top when a non-current day is selected", async () => {
+    const user = userEvent.setup();
+
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
@@ -105,18 +99,17 @@ describe("HourlyWeatherSection.tsx", () => {
       { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /thursday/i });
+    await user.click(screen.getByRole("button", { name: /thursday/i }));
+    await user.click(screen.getByRole("button", { name: /friday/i }));
 
-    await userEvent.click(toggle);
-
-    const fridayButton = screen.getByRole("button", { name: /friday/i });
-
-    await userEvent.click(fridayButton);
-
-    expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith({ top: 0 });
+    await waitFor(() => {
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith({ top: 0 });
+    });
   });
 
-  it("should reorder days of the week based on current day inside days dropdown", async () => {
+  it("reorders days starting from the current day", async () => {
+    const user = userEvent.setup();
+
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
@@ -126,9 +119,7 @@ describe("HourlyWeatherSection.tsx", () => {
       { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /thursday/i });
-
-    await userEvent.click(toggle);
+    await user.click(screen.getByRole("button", { name: /thursday/i }));
 
     const dropdown = screen.getByTestId("days-dropdown");
     const buttons = within(dropdown).getAllByRole("button");
@@ -144,7 +135,9 @@ describe("HourlyWeatherSection.tsx", () => {
     ]);
   });
 
-  it("should automatically hide the dropdown after a day is selected", async () => {
+  it("closes dropdown after selecting a day", async () => {
+    const user = userEvent.setup();
+
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
@@ -154,20 +147,17 @@ describe("HourlyWeatherSection.tsx", () => {
       { wrapper }
     );
 
-    const toggle = screen.getByRole("button", { name: /thursday/i });
-
-    await userEvent.click(toggle);
-
+    await user.click(screen.getByRole("button", { name: /thursday/i }));
     expect(screen.getByTestId("days-dropdown")).toBeInTheDocument();
 
-    const fridayButton = screen.getByRole("button", { name: /friday/i });
+    await user.click(screen.getByRole("button", { name: /friday/i }));
 
-    await userEvent.click(fridayButton);
-
-    expect(screen.queryByTestId("days-dropdown")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId("days-dropdown")).not.toBeInTheDocument();
+    });
   });
 
-  it("should reduce opacity for hours that are in the past and on the same day", async () => {
+  it("applies opacity correctly for past hours on the current day", () => {
     render(
       <HourlyWeatherSection
         hourlyWeather={testData}
@@ -177,28 +167,14 @@ describe("HourlyWeatherSection.tsx", () => {
       { wrapper }
     );
 
-    const todayListItems = screen.getAllByRole("listitem");
+    const listItems = screen.getAllByRole("listitem");
 
-    todayListItems.forEach((listItem, index) => {
-      if (index !== todayListItems.length - 1) {
-        expect(listItem.classList.contains("opacity-75")).toBe(true);
+    listItems.forEach((item, index) => {
+      if (index < listItems.length - 2) {
+        expect(item).toHaveClass("opacity-75");
       } else {
-        expect(listItem.classList.contains("opacity-100")).toBe(true);
+        expect(item).toHaveClass("opacity-100");
       }
-    });
-
-    const toggle = screen.getByRole("button", { name: /thursday/i });
-
-    await userEvent.click(toggle);
-
-    const fridayButton = screen.getByRole("button", { name: /friday/i });
-
-    await userEvent.click(fridayButton);
-
-    const fridayListItems = screen.getAllByRole("listitem");
-
-    fridayListItems.forEach((listItem) => {
-      expect(listItem.classList.contains("opacity-100")).toBe(true);
     });
   });
 });

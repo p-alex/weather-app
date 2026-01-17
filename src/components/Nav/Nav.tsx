@@ -18,12 +18,7 @@ function Nav() {
   return (
     <nav className="relative flex items-center justify-between">
       <picture>
-        <source
-          srcSet="/images/logo.svg"
-          width={197}
-          height={40}
-          media="(min-width: 640px)"
-        />
+        <source srcSet="/images/logo.svg" width={197} height={40} media="(min-width: 640px)" />
         <img src="/images/logo.svg" width="137.9" height="28" alt="Logo" />
       </picture>
       <VisibilityProvider
@@ -50,12 +45,7 @@ function Nav() {
                 height={18}
                 media="(min-width: 640px)"
               />
-              <img
-                src="/images/icon-dropdown.svg"
-                width={9}
-                height={14}
-                alt=""
-              />
+              <img src="/images/icon-dropdown.svg" width={9} height={14} alt="" />
             </picture>
           </button>
         )}
@@ -66,14 +56,10 @@ function Nav() {
           >
             <DropdownMenu data-testid="units-dropdown">
               <DropdownMenuButton
-                onClick={
-                  unitsType === "metric" ? setImperialUnits : setMetricUnits
-                }
+                onClick={unitsType === "metric" ? setImperialUnits : setMetricUnits}
                 autoFocus
               >
-                {unitsType === "metric"
-                  ? "Switch to Imperial"
-                  : "Switch to Metric"}
+                {unitsType === "metric" ? "Switch to Imperial" : "Switch to Metric"}
               </DropdownMenuButton>
               <DropdownMenuSection title="Temperature">
                 <DropdownMenuButton

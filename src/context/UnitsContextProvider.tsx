@@ -99,9 +99,7 @@ function UnitsContextProvider({ children }: Props) {
       windUnit = "km/h";
     }
 
-    let precipitationUnit = localstorage.get<PrecipitationUnit>(
-      precipitationLocalKey
-    );
+    let precipitationUnit = localstorage.get<PrecipitationUnit>(precipitationLocalKey);
     if (!precipitationUnit) {
       localstorage.set(precipitationLocalKey, "mm");
       precipitationUnit = "mm";

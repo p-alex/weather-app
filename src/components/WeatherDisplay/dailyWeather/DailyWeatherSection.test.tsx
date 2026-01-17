@@ -6,9 +6,7 @@ import type { IDailyWeather } from "../../../api/domain/entities/IDailyWeather";
 
 describe("DailyWeatherSection.tsx", () => {
   it("should display 7 empty weather cells if dailyWeather data provided is null", () => {
-    render(
-      <DailyWeatherSection dailyWeather={null} units={metricUnitsFixture} />
-    );
+    render(<DailyWeatherSection dailyWeather={null} units={metricUnitsFixture} />);
 
     const cells = screen.getAllByTestId("daily-weather-cell-placeholder");
 
@@ -60,20 +58,11 @@ describe("DailyWeatherSection.tsx", () => {
         minTemperature: 7,
       },
     ];
-    render(
-      <DailyWeatherSection
-        dailyWeather={dailyWeather}
-        units={metricUnitsFixture}
-      />
-    );
+    render(<DailyWeatherSection dailyWeather={dailyWeather} units={metricUnitsFixture} />);
 
     dailyWeather.forEach(({ minTemperature, maxTemperature }) => {
-      const maxTemp = screen.getByText(
-        new RegExp(`\\b${maxTemperature}\\b`, "i")
-      );
-      const minTemp = screen.getByText(
-        new RegExp(`\\b${minTemperature}\\b`, "i")
-      );
+      const maxTemp = screen.getByText(new RegExp(`\\b${maxTemperature}\\b`, "i"));
+      const minTemp = screen.getByText(new RegExp(`\\b${minTemperature}\\b`, "i"));
 
       expect(minTemp).toBeInTheDocument();
       expect(maxTemp).toBeInTheDocument();

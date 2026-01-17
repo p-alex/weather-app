@@ -104,15 +104,11 @@ describe("SearchLocationForm.tsx", () => {
 
     await userEvent.click(searchResultButton);
 
-    expect(onLocationSelectMock).toHaveBeenCalledWith(
-      getLocationUsecaseResponseFixture[0]
-    );
+    expect(onLocationSelectMock).toHaveBeenCalledWith(getLocationUsecaseResponseFixture[0]);
   });
 
   it("should display a no results message if there are no results to display", async () => {
-    server.use(
-      http.get(GET_LOCATION_DATA_BASE_URL, () => HttpResponse.json([]))
-    );
+    server.use(http.get(GET_LOCATION_DATA_BASE_URL, () => HttpResponse.json([])));
 
     const onLocationSelectMock = vi.fn();
 
@@ -134,9 +130,7 @@ describe("SearchLocationForm.tsx", () => {
   });
 
   it("should call onLocationSelect with null if there are no results to show", async () => {
-    server.use(
-      http.get(GET_LOCATION_DATA_BASE_URL, () => HttpResponse.json([]))
-    );
+    server.use(http.get(GET_LOCATION_DATA_BASE_URL, () => HttpResponse.json([])));
 
     const onLocationSelectMock = vi.fn();
 
@@ -184,12 +178,7 @@ describe("SearchLocationForm.tsx", () => {
   });
 
   it("should display error message if location search request fails", async () => {
-    server.use(
-      http.get(
-        GET_LOCATION_DATA_BASE_URL,
-        () => new HttpResponse(null, { status: 500 })
-      )
-    );
+    server.use(http.get(GET_LOCATION_DATA_BASE_URL, () => new HttpResponse(null, { status: 500 })));
 
     render(<SearchLocationForm onLocationSelect={() => {}} />, {
       wrapper: createWrapper(),

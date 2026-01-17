@@ -93,17 +93,11 @@ describe("Nav.tsx", () => {
 
     expect(unitBtns.tempMetricBtn).toHaveAttribute("aria-selected", "false");
     expect(unitBtns.windMetricBtn).toHaveAttribute("aria-selected", "false");
-    expect(unitBtns.precipitationMetricBtn).toHaveAttribute(
-      "aria-selected",
-      "false"
-    );
+    expect(unitBtns.precipitationMetricBtn).toHaveAttribute("aria-selected", "false");
 
     expect(unitBtns.tempImperialBtn).toHaveAttribute("aria-selected", "true");
     expect(unitBtns.windImperialBtn).toHaveAttribute("aria-selected", "true");
-    expect(unitBtns.precipitationImperialBtn).toHaveAttribute(
-      "aria-selected",
-      "true"
-    );
+    expect(unitBtns.precipitationImperialBtn).toHaveAttribute("aria-selected", "true");
   });
 
   it("should change to metric units when clicking on 'Switch to Metric' button", async () => {
@@ -127,17 +121,11 @@ describe("Nav.tsx", () => {
 
     expect(unitBtns.tempMetricBtn).toHaveAttribute("aria-selected", "true");
     expect(unitBtns.windMetricBtn).toHaveAttribute("aria-selected", "true");
-    expect(unitBtns.precipitationMetricBtn).toHaveAttribute(
-      "aria-selected",
-      "true"
-    );
+    expect(unitBtns.precipitationMetricBtn).toHaveAttribute("aria-selected", "true");
 
     expect(unitBtns.tempImperialBtn).toHaveAttribute("aria-selected", "false");
     expect(unitBtns.windImperialBtn).toHaveAttribute("aria-selected", "false");
-    expect(unitBtns.precipitationImperialBtn).toHaveAttribute(
-      "aria-selected",
-      "false"
-    );
+    expect(unitBtns.precipitationImperialBtn).toHaveAttribute("aria-selected", "false");
   });
 
   it("should change to imperial temp unit when clicking on imperial temp button", async () => {
@@ -271,9 +259,7 @@ describe("Nav.tsx", () => {
     await userEvent.click(metricButtons.windMetricBtn);
     await userEvent.click(metricButtons.precipitationMetricBtn);
 
-    expect(
-      screen.queryByRole("button", { name: /switch to imperial/i })
-    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /switch to imperial/i })).toBeInTheDocument();
   });
 
   it("should set the units according to those stored in localstorage", async () => {
@@ -283,10 +269,7 @@ describe("Nav.tsx", () => {
 
     window.localStorage.setItem(tempLocalKey, JSON.stringify(tempUnit));
     window.localStorage.setItem(windLocalKey, JSON.stringify(windUnit));
-    window.localStorage.setItem(
-      precipitationLocalKey,
-      JSON.stringify(precipitationUnit)
-    );
+    window.localStorage.setItem(precipitationLocalKey, JSON.stringify(precipitationUnit));
 
     render(<Nav />, { wrapper });
 

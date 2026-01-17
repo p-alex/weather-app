@@ -54,26 +54,18 @@ describe("WeatherRepository.ts", () => {
   it("should return weather data if all validations passed", async () => {
     const result = await weatherRepository.getAllData(1, 1);
 
-    const expectedResult: Awaited<ReturnType<WeatherRepository["getAllData"]>> =
-      {
-        currentWeather: currentWeatherFixture,
-        dailyWeather: [dailyWeatherFixture],
-        hourlyWeather: [hourlyWeatherFixture],
-      };
+    const expectedResult: Awaited<ReturnType<WeatherRepository["getAllData"]>> = {
+      currentWeather: currentWeatherFixture,
+      dailyWeather: [dailyWeatherFixture],
+      hourlyWeather: [hourlyWeatherFixture],
+    };
 
     expect(result).toEqual(expectedResult);
   });
 
   it("should propagate errors", async () => {
-    server.use(
-      http.get(
-        GET_WEATHER_DATA_BASE_URL,
-        () => new HttpResponse(null, { status: 500 })
-      )
-    );
+    server.use(http.get(GET_WEATHER_DATA_BASE_URL, () => new HttpResponse(null, { status: 500 })));
 
-    await expect(weatherRepository.getAllData(1, 1)).rejects.toThrow(
-      ApiException
-    );
+    await expect(weatherRepository.getAllData(1, 1)).rejects.toThrow(ApiException);
   });
 });

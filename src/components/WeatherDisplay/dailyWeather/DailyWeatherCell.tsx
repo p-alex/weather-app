@@ -14,24 +14,19 @@ function DailyWeatherCell({ dailyWeather, units }: Props) {
 
   return (
     <div
-      className="py-4 px-2.5 bg-ui border border-ui-border rounded-ui-container flex flex-col gap-4 items-center w-full h-41.25"
+      className="py-4 px-2.5 bg-ui border border-ui-border rounded-ui-container flex flex-col items-center justify-between w-full h-41.25"
       data-testid={"daily-weather-cell"}
     >
-      <p className="text-lg font-medium text-text">
+      <p className="text-lg font-medium text-text leading-[120%]">
         {datePartsExtractor.getDayPartialText(dailyWeather.date)}
       </p>
-      <img
-        src={weatherCodeToImageUrl(dailyWeather.weatherCode)}
-        width={60}
-        height={60}
-        alt=""
-      />
+      <img src={weatherCodeToImageUrl(dailyWeather.weatherCode)} width={60} height={60} alt="" />
       <div className="w-full flex justify-between">
-        <p className="font-medium text-text">
-          {displayTemperature(dailyWeather.maxTemperature)}°
+        <p className="font-medium text-text leading-[120%]">
+          {displayTemperature(dailyWeather.maxTemperature) + "°"}
         </p>
-        <p className="font-medium text-neutral-200">
-          {displayTemperature(dailyWeather.minTemperature)}°
+        <p className="font-medium text-neutral-200 leading-[120%]">
+          {displayTemperature(dailyWeather.minTemperature) + "°"}
         </p>
       </div>
     </div>

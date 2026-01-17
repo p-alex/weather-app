@@ -6,9 +6,7 @@ describe("VisibilityProvider.tsx", () => {
   it("should toggle visibility if the toggle button is clicked", async () => {
     render(
       <VisibilityProvider
-        toggle={({ toggleVisibility }) => (
-          <button onClick={toggleVisibility}>toggle</button>
-        )}
+        toggle={({ toggleVisibility }) => <button onClick={toggleVisibility}>toggle</button>}
         content={() => <p>content</p>}
       />
     );
@@ -27,12 +25,8 @@ describe("VisibilityProvider.tsx", () => {
   it("should be able to toggle visibility off from content", async () => {
     render(
       <VisibilityProvider
-        toggle={({ toggleVisibility }) => (
-          <button onClick={toggleVisibility}>toggle</button>
-        )}
-        content={({ toggleVisibilityOff }) => (
-          <button onClick={toggleVisibilityOff}>close</button>
-        )}
+        toggle={({ toggleVisibility }) => <button onClick={toggleVisibility}>toggle</button>}
+        content={({ toggleVisibilityOff }) => <button onClick={toggleVisibilityOff}>close</button>}
       />
     );
 
@@ -44,9 +38,7 @@ describe("VisibilityProvider.tsx", () => {
 
     await userEvent.click(closeButton);
 
-    expect(
-      screen.queryByRole("button", { name: /close/i })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /close/i })).not.toBeInTheDocument();
   });
 
   it("should toggle visibility off and move focus to toggle if the 'Escape' key is pressed while the dropdown has focus", async () => {
@@ -69,9 +61,7 @@ describe("VisibilityProvider.tsx", () => {
 
     await userEvent.keyboard("[Escape]");
 
-    expect(
-      screen.queryByRole("button", { name: /content/i })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /content/i })).not.toBeInTheDocument();
 
     expect(toggle).toHaveFocus();
   });

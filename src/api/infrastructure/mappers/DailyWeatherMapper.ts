@@ -3,9 +3,7 @@ import AppException from "../../exceptions/AppException";
 import type { DailyWeatherExternal } from "../dtos/DailyWeatherExternal";
 
 export class DailyWeatherMapper {
-  externalToEntity = (
-    dailyWeatherExternal: DailyWeatherExternal
-  ): IDailyWeather[] => {
+  externalToEntity = (dailyWeatherExternal: DailyWeatherExternal): IDailyWeather[] => {
     const length = dailyWeatherExternal.time.length;
 
     if (

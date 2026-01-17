@@ -45,10 +45,7 @@ export class DatePartsExtractor {
     return hours;
   };
 
-  getDay = (
-    date: SupportedDateType,
-    { leadingZero = false }: { leadingZero?: boolean } = {}
-  ) => {
+  getDay = (date: SupportedDateType, { leadingZero = false }: { leadingZero?: boolean } = {}) => {
     const parsedDate = this._parseDate(date);
     const day = parsedDate.getDate();
     return leadingZero ? this._addLeadingZero(day) : day;
@@ -64,10 +61,7 @@ export class DatePartsExtractor {
     return daysFullStr[parsedDate.getDay()].slice(0, 3);
   };
 
-  getMonth = (
-    date: SupportedDateType,
-    { leadingZero = false }: { leadingZero?: boolean } = {}
-  ) => {
+  getMonth = (date: SupportedDateType, { leadingZero = false }: { leadingZero?: boolean } = {}) => {
     const parsedDate = this._parseDate(date);
     if (leadingZero) return this._addLeadingZero(parsedDate.getMonth() + 1);
     return parsedDate.getMonth() + 1;
@@ -94,8 +88,7 @@ export class DatePartsExtractor {
   };
 
   private _addLeadingZero(value: number) {
-    const doesValueHaveTwoDigits =
-      Math.floor(Math.log10(Math.abs(value))) + 1 === 2;
+    const doesValueHaveTwoDigits = Math.floor(Math.log10(Math.abs(value))) + 1 === 2;
     if (doesValueHaveTwoDigits) return value;
     return "0" + value;
   }

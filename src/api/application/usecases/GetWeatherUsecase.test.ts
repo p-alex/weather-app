@@ -11,12 +11,11 @@ describe("GetWeatherUsecase.ts", () => {
   let weatherRepositoryMock: WeatherRepository;
   let getWeatherUsecase: GetWeatherUsecase;
 
-  const repositoryResult: Awaited<ReturnType<WeatherRepository["getAllData"]>> =
-    {
-      currentWeather: currentWeatherFixture,
-      dailyWeather: [dailyWeatherFixture],
-      hourlyWeather: [hourlyWeatherFixture],
-    };
+  const repositoryResult: Awaited<ReturnType<WeatherRepository["getAllData"]>> = {
+    currentWeather: currentWeatherFixture,
+    dailyWeather: [dailyWeatherFixture],
+    hourlyWeather: [hourlyWeatherFixture],
+  };
 
   beforeEach(() => {
     getAllDataMock = vi.fn().mockResolvedValue(null);

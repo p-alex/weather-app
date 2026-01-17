@@ -10,7 +10,7 @@ interface Props {
 function DailyWeatherSection({ dailyWeather, units }: Props) {
   return (
     <section className="flex flex-col gap-5 w-full">
-      <h2 className="text-xl font-semibold font-dmSans">Daily forecast</h2>
+      <h2 className="text-xl font-semibold font-dmSans leading-[120%]">Daily forecast</h2>
       <div className="grid min-[747px]:grid-cols-7 gap-4 w-full grid-cols-3 min-[480px]:grid-cols-4">
         {!dailyWeather &&
           [1, 2, 3, 4, 5, 6, 7].map((_, index) => {
@@ -24,13 +24,7 @@ function DailyWeatherSection({ dailyWeather, units }: Props) {
           })}
         {dailyWeather &&
           dailyWeather.map((weather) => {
-            return (
-              <DailyWeatherCell
-                key={weather.date}
-                dailyWeather={weather}
-                units={units}
-              />
-            );
+            return <DailyWeatherCell key={weather.date} dailyWeather={weather} units={units} />;
           })}
       </div>
     </section>

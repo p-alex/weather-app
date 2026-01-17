@@ -20,6 +20,12 @@
 
 @font-face {
   font-family: DMSans;
+  src: url("/fonts/DMSans-Bold.woff2");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: DMSans;
   src: url("/fonts/DMSans-SemiBoldItalic.woff2");
   font-weight: 600;
   font-style: italic;
@@ -99,10 +105,6 @@
 
   body {
     @apply text-text bg-neutral-900 leading-[120%] font-dmSans relative;
-
-    /* background-image: url("design/dropdown-state.jpg");
-    background-repeat: no-repeat;
-    background-position: top center; */
   }
 
   h1,

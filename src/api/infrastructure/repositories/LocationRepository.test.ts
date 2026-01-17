@@ -30,9 +30,7 @@ describe("LocationRepostory.ts", () => {
 
   it("should return an empty array if there are no results", async () => {
     server.use(
-      http.get("https://geocoding-api.open-meteo.com/v1/search", () =>
-        HttpResponse.json({})
-      )
+      http.get("https://geocoding-api.open-meteo.com/v1/search", () => HttpResponse.json({}))
     );
 
     const result = await locationRepository.getAllByQuery("Tokyo");

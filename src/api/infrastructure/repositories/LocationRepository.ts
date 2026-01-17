@@ -13,8 +13,7 @@ export class LocationRepository {
 
     response.results.forEach((location) => {
       const isValid = locationExternal.safeParse(location).success;
-      if (isValid)
-        validLocations.push(locationMapper.externalToEntity(location));
+      if (isValid) validLocations.push(locationMapper.externalToEntity(location));
     });
 
     return validLocations;

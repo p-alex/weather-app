@@ -1,9 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import getWeatherData, {
-  GET_WEATHER_DATA_BASE_URL,
-  type GetWeatherParams,
-} from "./getWeatherData";
+import getWeatherData, { GET_WEATHER_DATA_BASE_URL, type GetWeatherParams } from "./getWeatherData";
 import ApiException from "../../exceptions/ApiException";
 import { getWeatherDataExternalResponseFixture } from "../../../__fixtures__/weather/getWeatherDataExternalResponseFixture";
 

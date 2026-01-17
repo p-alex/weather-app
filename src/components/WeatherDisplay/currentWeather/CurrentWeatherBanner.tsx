@@ -14,12 +14,7 @@ interface Props {
   isLoading: boolean;
 }
 
-function CurrentWeatherBanner({
-  currentLocation,
-  currentWeather,
-  units,
-  isLoading,
-}: Props) {
+function CurrentWeatherBanner({ currentLocation, currentWeather, units, isLoading }: Props) {
   const displayTemperature = useDisplayTemperature(units);
 
   const locationDate = convertTimezone({

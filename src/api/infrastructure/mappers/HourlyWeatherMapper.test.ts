@@ -16,9 +16,7 @@ describe("HourlyWeatherMapper.ts", () => {
   });
 
   it("should return correctly if data is supported", () => {
-    const result = hourlyWeatherMapper.externalToEntity(
-      hourlyWeatherExternalFixture
-    );
+    const result = hourlyWeatherMapper.externalToEntity(hourlyWeatherExternalFixture);
 
     expect(result).toEqual([hourlyWeatherFixture]);
   });
