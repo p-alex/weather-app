@@ -9,6 +9,7 @@ export class CurrentWeatherMapper {
     precipitation: currentWeatherExternal.precipitation,
     weatherCode: currentWeatherExternal.weather_code,
     humidity: currentWeatherExternal.relative_humidity_2m,
+    time: currentWeatherExternal.time,
   });
 }
 

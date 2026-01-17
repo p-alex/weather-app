@@ -8,4 +8,5 @@ export const currentWeatherFixture: ICurrentWeather = {
   weatherCode: currentWeatherExternalFixture.weather_code,
   windSpeed: currentWeatherExternalFixture.wind_speed_10m,
   humidity: currentWeatherExternalFixture.relative_humidity_2m,
+  time: currentWeatherExternalFixture.time,
 };

@@ -2,10 +2,8 @@ import type { ICurrentWeather } from "../../../api/domain/entities/ICurrentWeath
 import type { ILocation } from "../../../api/domain/entities/ILocation";
 import type { Units } from "../../../context/UnitsContextProvider";
 import useDisplayTemperature from "../../../hooks/useDisplayTemperature";
-import convertTimezone from "../../../utils/convertTimezone";
 import datePartsExtractor from "../../../utils/DatePartsExtractor";
 import weatherCodeToImageUrl from "../../../utils/weather/weatherCodeToImageUrl";
-import { currentTimezone } from "../../../utils/currentTimezone";
 
 interface Props {
   currentLocation: ILocation;
@@ -16,12 +14,6 @@ interface Props {
 
 function CurrentWeatherBanner({ currentLocation, currentWeather, units, isLoading }: Props) {
   const displayTemperature = useDisplayTemperature(units);
-
-  const locationDate = convertTimezone({
-    date: new Date(Date.now()),
-    fromTimezone: currentTimezone,
-    toTimezone: currentLocation.timezone,
-  });
 
   const bannerBg = isLoading
     ? "bg-none bg-ui min-[747px]:bg-none"
@@ -42,12 +34,12 @@ function CurrentWeatherBanner({ currentLocation, currentWeather, units, isLoadin
             </h2>
             <p className="font-medium text-text text-lg opacity-80 leading-[100%]">
               {`${datePartsExtractor.getDayFullText(
-                locationDate
+                currentWeather.time
               )}, ${datePartsExtractor.getMonthPartialText(
-                locationDate
+                currentWeather.time
               )} ${datePartsExtractor.getDay(
-                locationDate
-              )}, ${datePartsExtractor.getYear(locationDate)}`}
+                currentWeather.time
+              )}, ${datePartsExtractor.getYear(currentWeather.time)}`}
             </p>
           </div>
           <div className="flex items-center gap-5 max-[315px]:flex-col">
