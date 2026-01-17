@@ -31,11 +31,7 @@ interface IState {
   isReady: boolean;
 }
 
-function HourlyWeatherSection({
-  isLoading,
-  hourlyWeather,
-  currentLocation,
-}: Props) {
+function HourlyWeatherSection({ isLoading, hourlyWeather, currentLocation }: Props) {
   const [state, setState] = useState<IState>({
     locationDate: null,
     selectedDay: null,
@@ -72,9 +68,7 @@ function HourlyWeatherSection({
   }, [state.locationDate, state.selectedDay, state.groupedHourlyWeather]);
 
   const handleScrollCurrentHourCellIntoView = useCallback(() => {
-    const currentHourCell = document.getElementById(
-      currentHourCellId
-    ) as HTMLLIElement | null;
+    const currentHourCell = document.getElementById(currentHourCellId) as HTMLLIElement | null;
 
     const prevWindowScrollY = window.scrollY;
 
@@ -84,9 +78,7 @@ function HourlyWeatherSection({
   }, []);
 
   const handleScrollToTop = useCallback(() => {
-    const scrollableContainer = document.getElementById(
-      scrollableContainerId
-    ) as HTMLDivElement;
+    const scrollableContainer = document.getElementById(scrollableContainerId) as HTMLDivElement;
 
     scrollableContainer?.scrollTo({ top: 0 });
   }, []);
@@ -94,18 +86,15 @@ function HourlyWeatherSection({
   useEffect(() => {
     if (!state.isReady) return;
 
-    if (
-      state.selectedDay !==
-      datePartsExtractor.getDayFullText(state.locationDate!)
-    )
+    if (state.selectedDay !== datePartsExtractor.getDayFullText(state.locationDate!))
       return handleScrollToTop();
 
     handleScrollCurrentHourCellIntoView();
   }, [state, handleScrollCurrentHourCellIntoView, handleScrollToTop]);
 
   return (
-    <section className="w-full h-full py-5 px-4 sm:py-6 sm:px-6 rounded-ui-container bg-ui flex flex-col justify-between gap-4">
-      <div className="flex items-center w-full justify-between">
+    <section className="w-full h-full py-5 sm:py-6 rounded-ui-container bg-ui flex flex-col justify-between gap-4">
+      <div className="flex items-center w-full justify-between px-4 sm:px-6">
         <h2 className="font-semibold text-xl leading-[120%] text-text font-dmSans">
           Hourly forecast
         </h2>
@@ -119,12 +108,7 @@ function HourlyWeatherSection({
                 onClick={toggleVisibility}
               >
                 {isLoading ? "-" : state.selectedDay}
-                <img
-                  src="/images/icon-dropdown.svg"
-                  width={12}
-                  height={18}
-                  alt=""
-                />
+                <img src="/images/icon-dropdown.svg" width={12} height={18} alt="" />
               </button>
             );
           }}
@@ -134,10 +118,7 @@ function HourlyWeatherSection({
                 style={{ top: `calc(${toggleHeight}px + 10px)` }}
                 className="absolute w-auto min-w-53.5 z-10 right-0"
               >
-                <DropdownMenu
-                  className="top-2.5 right-0 w-full p-2"
-                  data-testid="days-dropdown"
-                >
+                <DropdownMenu className="top-2.5 right-0 w-full p-2" data-testid="days-dropdown">
                   <div className="flex flex-col gap-1 w-full">
                     {state.isReady &&
                       handleReorderDaysOfTheWeek(
@@ -168,7 +149,7 @@ function HourlyWeatherSection({
       </div>
 
       <ul
-        className="flex flex-col w-full gap-4 overflow-y-scroll h-[594.4px] scroll-smooth"
+        className="flex flex-col w-full gap-4 overflow-y-scroll h-[594.4px] scroll-smooth px-4 sm:px-6"
         id={scrollableContainerId}
       >
         {isLoading &&
@@ -186,55 +167,47 @@ function HourlyWeatherSection({
           state.groupedHourlyWeather &&
           state.selectedDay &&
           state.locationDate &&
-          (state.groupedHourlyWeather[state.selectedDay] ?? []).map(
-            (weatherData) => {
-              const todayLocationHour = state.locationDate!.getHours();
+          (state.groupedHourlyWeather[state.selectedDay] ?? []).map((weatherData) => {
+            const todayLocationHour = state.locationDate!.getHours();
 
-              const weatherDataHour = datePartsExtractor.getHour(
-                weatherData.date,
-                "24Hr"
-              );
+            const weatherDataHour = datePartsExtractor.getHour(weatherData.date, "24Hr");
 
-              const isCurrentHour = todayLocationHour === weatherDataHour;
+            const isCurrentHour = todayLocationHour === weatherDataHour;
 
-              const isEarlierThenCurrentHour =
-                weatherDataHour < todayLocationHour &&
-                new Date(weatherData.date) < state.locationDate!;
+            const isEarlierThenCurrentHour =
+              weatherDataHour < todayLocationHour &&
+              new Date(weatherData.date) < state.locationDate!;
 
-              return (
-                <li
-                  id={isCurrentHour ? currentHourCellId : undefined}
-                  key={weatherData.date}
-                  className={`${
-                    isEarlierThenCurrentHour ? "opacity-75" : "opacity-100"
-                  }`}
-                >
-                  <HourlyWeatherCell hourlyWeather={weatherData} />
-                </li>
-              );
-            }
-          )}
+            return (
+              <li
+                id={isCurrentHour ? currentHourCellId : undefined}
+                key={weatherData.date}
+                className={`${isEarlierThenCurrentHour ? "opacity-75" : "opacity-100"}`}
+              >
+                <HourlyWeatherCell hourlyWeather={weatherData} />
+              </li>
+            );
+          })}
       </ul>
     </section>
   );
 }
 
-function groupHourlyWeatherByDate(
-  hourlyWeather: IHourlyWeather[]
-): HourlyWeatherGroupedByDate {
-  return hourlyWeather.reduce((acc, curr) => {
-    const currentHourlyWeather = curr;
+function groupHourlyWeatherByDate(hourlyWeather: IHourlyWeather[]): HourlyWeatherGroupedByDate {
+  return hourlyWeather.reduce(
+    (acc, curr) => {
+      const currentHourlyWeather = curr;
 
-    const dayOfTheWeek = datePartsExtractor.getDayFullText(
-      currentHourlyWeather.date
-    );
+      const dayOfTheWeek = datePartsExtractor.getDayFullText(currentHourlyWeather.date);
 
-    if (!acc[dayOfTheWeek]) acc[dayOfTheWeek] = [];
+      if (!acc[dayOfTheWeek]) acc[dayOfTheWeek] = [];
 
-    acc[dayOfTheWeek].push(currentHourlyWeather);
+      acc[dayOfTheWeek].push(currentHourlyWeather);
 
-    return acc;
-  }, {} as { [key: string]: IHourlyWeather[] });
+      return acc;
+    },
+    {} as { [key: string]: IHourlyWeather[] }
+  );
 }
 
 function handleReorderDaysOfTheWeek(currentDay: DaysFullStr[number]) {
