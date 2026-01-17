@@ -1,9 +1,9 @@
-import z from "zod";
+import { enum as enum_, object } from "zod/v4-mini";
 
-const hourlyWeatherUnitsExternal = z.object({
-  time: z.enum(["iso8601"]),
-  temperature_2m: z.enum(["°C"]),
-  weather_code: z.enum(["wmo code"]),
+const hourlyWeatherUnitsExternal = object({
+  time: enum_(["iso8601"]),
+  temperature_2m: enum_(["°C"]),
+  weather_code: enum_(["wmo code"]),
 });
 
 export default hourlyWeatherUnitsExternal;

@@ -1,9 +1,9 @@
-import z from "zod";
+import { array, string, number, object } from "zod/v4-mini";
 
-const hourlyWeatherExternal = z.object({
-  time: z.array(z.string()),
-  temperature_2m: z.array(z.number()),
-  weather_code: z.array(z.number()),
+const hourlyWeatherExternal = object({
+  time: array(string()),
+  temperature_2m: array(number()),
+  weather_code: array(number()),
 });
 
 export default hourlyWeatherExternal;
