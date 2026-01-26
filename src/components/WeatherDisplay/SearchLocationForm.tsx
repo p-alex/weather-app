@@ -22,7 +22,8 @@ function SearchLocationForm({ onLocationSelect }: Props) {
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const query = data.get("query") as string;
+    const query = (data.get("query") as string).trim();
+    if (!query) return;
     setQuery(query);
   };
 
@@ -39,7 +40,7 @@ function SearchLocationForm({ onLocationSelect }: Props) {
     }
   }, [locations]);
 
-  const isTyping = searchValue !== query;
+  const isTyping = searchValue.trim() !== query;
 
   const shouldShowResults =
     locations.data && locations.data.length > 0 && !locations.isLoading && !isTyping;

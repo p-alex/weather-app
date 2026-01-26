@@ -83,6 +83,50 @@ describe("SearchLocationForm.tsx", () => {
     });
   });
 
+  it("should not search if the query is empty", async () => {
+    const searchRequest = vi.fn();
+
+    server.use(http.get(GET_LOCATION_DATA_BASE_URL, searchRequest));
+
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
+
+    const input = screen.getByRole("textbox");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await userEvent.click(searchButton);
+
+    expect(searchRequest).not.toHaveBeenCalled();
+
+    await userEvent.type(input, "    ");
+
+    await userEvent.click(searchButton);
+
+    expect(searchRequest).not.toHaveBeenCalled();
+  });
+
+  it("should not search if the query is less then 2 characters long", async () => {
+    const searchRequest = vi.fn();
+
+    server.use(http.get(GET_LOCATION_DATA_BASE_URL, searchRequest));
+
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
+
+    const input = screen.getByRole("textbox");
+
+    await userEvent.type(input, "b");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await userEvent.click(searchButton);
+
+    expect(searchRequest).not.toHaveBeenCalled();
+  });
+
   it("should select a search result", async () => {
     const onLocationSelectMock = vi.fn();
 
@@ -217,5 +261,27 @@ describe("SearchLocationForm.tsx", () => {
     await userEvent.click(locationButton);
 
     expect(input).toHaveValue("");
+  });
+
+  it("should display location search results even if the search query contains empty spaces at the start or the end of it", async () => {
+    render(<SearchLocationForm onLocationSelect={() => {}} />, {
+      wrapper: createWrapper(),
+    });
+
+    const input = screen.getByRole("textbox");
+
+    await userEvent.type(input, "       bu      ");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+
+    await userEvent.click(searchButton);
+
+    getLocationUsecaseResponseFixture.forEach((location) => {
+      expect(
+        screen.getByRole("button", {
+          name: `${location.name}, ${location.country}`,
+        })
+      ).toBeInTheDocument();
+    });
   });
 });
