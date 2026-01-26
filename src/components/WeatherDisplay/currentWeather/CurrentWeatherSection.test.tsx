@@ -21,7 +21,7 @@ describe("CurrentWeatherSection.tsx", () => {
 
     const windSpeed = screen.getByText(`${Math.round(currentWeatherFixture.windSpeed)} km/h`);
 
-    const precipitation = screen.getByText(`${currentWeatherFixture.precipitation.toFixed(1)} mm`);
+    const precipitation = screen.getByText(`${currentWeatherFixture.precipitation.toFixed(2)} mm`);
 
     expect(temperature).toBeInTheDocument();
     expect(humidity).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("CurrentWeatherSection.tsx", () => {
     );
 
     const precipitation = screen.getByText(
-      `${(currentWeatherFixture.precipitation / 25.4).toFixed(1)} in`
+      `${(currentWeatherFixture.precipitation / 25.4).toFixed(2)} in`
     );
 
     expect(temperature).toBeInTheDocument();
