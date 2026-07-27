@@ -1,6 +1,6 @@
 # 🌤️ Weather App
 
-A clean, responsive weather application built with React and TypeScript. Search for any location and get real-time current conditions, hourly forecasts, and a multi-day daily outlook — all with support for switching between metric and imperial units.
+A clean, responsive weather app built with React and TypeScript. Search for any location and get real-time current conditions, hourly forecasts, and a multi-day daily outlook — all with support for switching between metric and imperial units.
 
 🔗 **Live Demo:** [weather-app-ten-alpha-64.vercel.app](https://weather-app-ten-alpha-64.vercel.app)
 
